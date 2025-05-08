@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS GamesPlayed;
 DROP TABLE IF EXISTS Friends;
 DROP TABLE IF EXISTS Games;
 DROP TABLE IF EXISTS Players;
+DROP TABLE IF EXISTS PlayersFriends;
 
 ---Table for players-------------
 CREATE TABLE Players(
@@ -25,12 +26,18 @@ CREATE TABLE Games(
 
 ---Table for friends--------------
 CREATE TABLE Friends(
-    friend_id INT NOT NULL,
-    player_id INT NOT NULL, 
+    friend_id INT NOT NULL UNIQUE,
+    PRIMARY KEY (friend_id)
+);
+
+---Intersection table for PlayersFriends--------------
+CREATE TABLE PlayersFriends(
+    friend_id INT NOT NULL UNIQUE,
+    player_id INT NOT NULL UNIQUE, 
     status ENUM ('pending', 'accepted', 'blocked') NOT NULL,
     PRIMARY KEY (player_id, friend_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id) ON UPDATE CASCADE,
-    FOREIGN KEY (friend_id) REFERENCES Players(player_id)ON UPDATE CASCADE
+    FOREIGN KEY (friend_id) REFERENCES Friends(friend_id) ON UPDATE CASCADE
 );
 
 ---Table for GamesPlayed--------------
@@ -48,26 +55,29 @@ CREATE TABLE GamesPlayed(
     FOREIGN KEY (game_id) REFERENCES Games(game_id) ON UPDATE CASCADE
 );
 
----Insert example data into the players table--------------
+---Insert example data into the Players table--------------
 INSERT INTO Players (username, email, password)
 VALUES ('gamer_kid', 'gamer_kid@email.com', '************'),
        ('racergirl12', 'racingislife@email.com', '************'),
        ('tetrislover99', 'retrogames1@email.com', '************');
 
----Insert example data into the friends table--------------
-INSERT INTO Friends (player_id, friend_id, status)
+---Insert example data into the PlayerFriends table--------------
+INSERT INTO PlayersFriends (player_id, friend_id, status)
 VALUES (6599, 6732, 'declined'),
        (6732, 6599, 'accepted'),
        (6922, 6732, 'pending');
 
----Insert example data into the games table--------------
+INSERT INTO Friends (friend_id)
+VALUES (6732);
+
+---Insert example data into the Games table--------------
 INSERT INTO Games (title, genre, game_platform, release_date)
 VALUES ('Minecraft', 'Fantasy', 'PC', '2011-11-18'),
        ('The Sims 4', 'Simulation', 'PC', '2015-02-17'),
        ('World of Warcraft', 'Fantasy', 'PC', '2004-11-23');
 
----Insert example data into the gamesplayed table--------------
+---Insert example data into the GamesPlayed table--------------
 INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)
-VALUES (6922, 1, 'finished', 5, '2025-02-04', '2025-05-01', 120),
+VALUES (6922, 1, 'finished playing', 5, '2025-02-04', '2025-05-01', 120),
        (6599, 2, 'want to play', 4, '2024-12-17', NULL, 0),
-       (6732, 3, 'finished', 4, '2024-04-23', '2025-04-30', 230);
+       (6732, 3, 'finished playing', 4, '2024-04-23', '2025-04-30', 230);
