@@ -35,7 +35,7 @@ CREATE TABLE Friends(
 CREATE TABLE PlayersFriends(
     friend_id INT NOT NULL,
     player_id INT NOT NULL, 
-    status ENUM ('pending', 'accepted', 'blocked') NOT NULL,
+    status ENUM ('pending', 'accepted', 'blocked', 'declined') NOT NULL,
     PRIMARY KEY (player_id, friend_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id) ON UPDATE CASCADE,
     FOREIGN KEY (friend_id) REFERENCES Friends(friend_id) ON UPDATE CASCADE
@@ -58,9 +58,9 @@ CREATE TABLE GamesPlayed(
 
 -- Insert example data into the Players table--------------
 INSERT INTO Players (username, email, password)
-VALUES ('gamer_kid', 'gamer_kid@email.com', '************'),
-       ('racergirl12', 'racingislife@email.com', '************'),
-       ('tetrislover99', 'retrogames1@email.com', '************');
+VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
+       ('racergirl12', 'racingislife@email.com', 'r@c3c@r!'),
+       ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
 
 -- Insert example data into the Friends table--------------
 INSERT INTO Friends (friend_id)

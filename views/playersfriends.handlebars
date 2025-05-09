@@ -1,3 +1,21 @@
 <h2>PlayersFriends</h2>
 <p><a href="/">Home </a><a href="/players">Players</a> <a href="/friends">Friends</a>
 <a href="/playersfriends">PlayersFriends</a> <a href="/games">Games</a> <a href="/gamesplayed">GamesPlayed</a></p>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Friend ID</th>
+            <th>Player ID</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each playersfriends}}
+        <tr>
+            <td>{{this.friend_id}}</td>
+            <td>{{this.player_id}}</td>
+            <td>{{this.status}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -32,7 +32,7 @@ app.get('/',(req, res) => {
 // Players page
 app.get('/players', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT player_id, username, email FROM Players;");
+        const [rows] = await db.query("SELECT player_id, username, email, password FROM Players;");
         res.render('players', { players: rows }); // Pass data to players.handlebars
     } catch (error) {
         console.error("Error fetching players:", error);
@@ -55,10 +55,32 @@ app.get('/games', async (req, res) => {
 // GamesPlayed page
 app.get('/gamesplayed', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT gameplayed_id, player_id, game_id, status, rating, date_completed, hours_played FROM GamesPlayed;");
-        res.render('games', { games: rows }); // Pass data to games.handlebars
+        const [rows] = await db.query("SELECT gameplayed_id, player_id, game_id, status, rating, date_started, date_completed, hours_played FROM GamesPlayed;");
+        res.render('gamesplayed', { gamesplayed: rows }); // Pass data to gamesplayed.handlebars
     } catch (error) {
-        console.error("Error fetching games:", error);
+        console.error("Error fetching gamesplayed:", error);
+        res.status(500).send("Database error.");
+    }
+});
+
+// Friends page
+app.get('/friends', async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT friend_id FROM Friends;");
+        res.render('friends', { friends: rows }); // Pass data to friends.handlebars
+    } catch (error) {
+        console.error("Error fetching friends:", error);
+        res.status(500).send("Database error.");
+    }
+});
+
+// Friends page
+app.get('/playersfriends', async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT player_id, friend_id, status FROM PlayersFriends;");
+        res.render('playersfriends', { playersfriends: rows }); // Pass data to playersfriends.handlebars
+    } catch (error) {
+        console.error("Error fetching playersfriends:", error);
         res.status(500).send("Database error.");
     }
 });
