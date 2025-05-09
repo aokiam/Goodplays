@@ -46,11 +46,11 @@ CREATE TABLE GamesPlayed(
     gameplayed_id INT PRIMARY KEY AUTO_INCREMENT,
     player_id INT NOT NULL,
     game_id INT NOT NULL,
-    status ENUM('finished playing', 'currently playing', 'want to play') NOT NULL,
+    status ENUM('finished playing', 'currently playing', 'want to play') ,
     rating DECIMAL(3,1) CHECK (rating >= 0 AND rating <= 10),
     date_started DATE,
     date_completed DATE,
-    hours_played INT NOT NULL DEFAULT 0,
+    hours_played INT DEFAULT 0,
     UNIQUE (player_id, game_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id) ON UPDATE CASCADE,
     FOREIGN KEY (game_id) REFERENCES Games(game_id) ON UPDATE CASCADE

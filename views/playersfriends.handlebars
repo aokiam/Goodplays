@@ -19,3 +19,26 @@
         {{/each}}
     </tbody>
 </table>
+
+<h3>View PlayersFriends</h3>
+<form method="POST" action="/view-playersfriends">
+    <button type="submit">View PlayersFriends</button>
+</form>
+
+<h3>Delete a Player's Friend</h3>
+<form method="POST" action="/delete-playersfriends">
+    <label for="player_id">Player ID:</label>
+    <input type="text" id="player_id" name="player_id"><br>
+    <label for="friend_id">Friend ID:</label>
+    <input type="text" id="friend_id" name="friend_id"><br>
+
+    <button type="submit">Delete Friend from Player</button>
+</form>
+
+<h3>Edit a playersfriends</h3>
+<form method="POST" action="/edit-playersfriends">
+    <label for="player_id">Player ID:</label>
+    <input type="text" id="player_id" name="Player_id"><br>
+
+    <button type="submit">Edit PlayersFriends</button>
+</form>

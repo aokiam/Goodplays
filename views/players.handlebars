@@ -21,3 +21,38 @@
         {{/each}}
     </tbody>
 </table>
+
+<h3>Add a New Player</h3>
+<form method="POST" action="/add-player">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email"><br>
+
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password"><br>
+
+    <button type="submit">Add Player</button>
+</form>
+
+<h3>Edit a player</h3>
+<form method="POST" action="/edit-player">
+    <label for="player_id">Player ID:</label>
+    <input type="text" id="player_id" name="Player_id"><br>
+
+    <button type="submit">Edit Player</button>
+</form>
+
+<h3>Delete a player</h3>
+<form method="POST" action="/delete-player">
+    <label for="player_id">Player ID:</label>
+    <input type="text" id="player_id" name="Player_id"><br>
+
+    <button type="submit">Delete Player</button>
+</form>
+
+<h3>View players</h3>
+<form method="POST" action="/view-players">
+    <button type="submit">View players</button>
+</form>

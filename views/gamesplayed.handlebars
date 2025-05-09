@@ -30,3 +30,49 @@
         {{/each}}
     </tbody>
 </table>
+
+<h3>Add a New Game Played</h3>
+<form method="POST" action="/add-gameplayed">
+    <label for="status">Title:</label>
+    <input type="text" id="title" name="title"><br>
+
+    <label for="genre">Genre:</label>
+    <input type="text" id="genre" name="genre"><br>
+
+    <label for="game_platform">Platform:</label>
+    <input type="text" id="game_platform" name="game_platform"><br>
+
+    <label for="release_date">Release Date:</label>
+    <input type="date" id="release_date" name="release_date"><br>
+
+    <button type="submit">Add Game</button>
+</form>
+
+
+<h3>Edit a Game Played</h3>
+<form method="POST" action="/edit-gameplayed">
+    <label for="player_id">Player ID:</label>
+    <input type="text" id="player_id" name="player_id"><br>
+
+    <label for="game_id">Game ID:</label>
+    <input type="text" id="game_id" name="game_id"><br>
+
+    <button type="submit">Edit Game Played</button>
+</form>
+
+<h3>Delete a Game Played</h3>
+<form method="POST" action="/delete-gameplayed">
+    <label for="player_id">Player ID:</label>
+    <input type="text" id="player_id" name="player_id"><br>
+
+    <label for="game_id">Game ID:</label>
+    <input type="text" id="game_id" name="game_id"><br>
+
+    <button type="submit">Delete Game Played</button>
+</form>
+
+
+<h3>View GamesPlayed</h3>
+<form method="POST" action="/view-gameplayed">
+    <button type="submit">View GamesPlayed</button>
+</form>

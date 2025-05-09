@@ -23,3 +23,25 @@
         {{/each}}
     </tbody>
 </table>
+
+<h3>Edit a game</h3>
+<form method="POST" action="/edit-game">
+    <label for="game_id">Game ID:</label>
+    <input type="text" id="game_id" name="game_id"><br>
+
+    <button type="submit">Edit Game</button>
+</form>
+
+
+<h3>Delete a game</h3>
+<form method="POST" action="/delete-game">
+    <label for="game_id">Game ID:</label>
+    <input type="text" id="game_id" name="game_id"><br>
+
+    <button type="submit">Delete Game</button>
+</form>
+
+<h3>View Games</h3>
+<form method="POST" action="/view-games">
+    <button type="submit">View Games</button>
+</form>
