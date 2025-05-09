@@ -1,0 +1,26 @@
+<h2>Games</h2>
+<p><a href="/home">Home</a></p>
+<p><a href="/players">Players</a></p>
+<p><a href="/games">Games</a></p>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Game ID</th>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Game Platform</th>
+            <th>Release Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each games}}
+        <tr>
+            <td>{{this.game_id}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.genre}}</td>
+            <td>{{this.game_platform}}</td>
+            <td>{{this.release_date}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,24 @@
+<h2>Games</h2>
+<p><a href="/home">Home</a></p>
+<p><a href="/players">Players</a></p>
+<p><a href="/games">Games</a></p>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Player ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Password</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each players}}
+        <tr>
+            <td>{{this.player_id}}</td>
+            <td>{{this.username}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.password}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

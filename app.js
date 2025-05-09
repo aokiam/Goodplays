@@ -1,42 +1,49 @@
 // SETUP
 // Express
 const express = require('express');  // We are using the express library for the web server
+const handlebars = require('express-handlebars');
 const app = express();               // We need to instantiate an express object to interact with the server in our code
 const PORT = 9400;     // Set a port number
 
 // Database 
 const db = require('./db-connector');
 
+// Set handlebars as the view engine
+app.engine('handlebars', handlebars.engine());
+app.set('view engine', 'handlebars');
+
+// Set the path to views and static files
+app.use(express.static(__dirname + '/public'));
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
 
 // ROUTES
-app.get('/', async function (req, res) {
+// Home Page
+app.get('/',(req, res) => {
+    res.render('home');
+});
+
+// Players page
+app.get('/players', async (req, res) => {
     try {
-        
-        // Define our queries
-        const query1 = 'DROP TABLE IF EXISTS diagnostic;';
-        const query2 = 'CREATE TABLE diagnostic(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(255) NOT NULL);';
-        const query3 = 'INSERT INTO diagnostic (text) VALUES ("MySQL and Node is working for myONID!");'; // Replace with your ONID
-        const query4 = 'SELECT * FROM diagnostic;';
-        
-        // Execute each query synchronously (await).
-        // We want each query to finish before the next one starts.
-        await db.query(query1);
-        await db.query(query2);
-        await db.query(query3);
-        const [rows] = await db.query(query4); // Store the results
-        
-        // Send the results to the browser
-        const base = "<h1>MySQL Results:</h1>";
-        res.send(base + JSON.stringify(rows));
-
+        const [rows] = await db.query("SELECT player_id, username, email FROM Players;");
+        res.render('players', { players: rows }); // Pass data to players.handlebars
     } catch (error) {
-        console.error("Error executing queries:", error);
-
-        // Send a generic error message to the browser
-        res.status(500).send("An error occurred while executing the database queries.");
+        console.error("Error fetching players:", error);
+        res.status(500).send("Database error.");
     }
 });
 
+// Games page
+app.get('/games', async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT games_id, title, genre, game_platform, release_date FROM Games;");
+        res.render('games', { games: rows }); // Pass data to games.handlebars
+    } catch (error) {
+        console.error("Error fetching games:", error);
+        res.status(500).send("Database error.");
+    }
+});
 
 // LISTENER
 
