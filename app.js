@@ -45,6 +45,19 @@ app.get('/games', async (req, res) => {
     }
 });
 
+
+// GamesPlayed page
+app.get('/gamesplayed', async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT gameplayed_id, player_id, game_id, status, rating, date_completed, hours_played FROM GamesPlayed;");
+        res.render('games', { games: rows }); // Pass data to games.handlebars
+    } catch (error) {
+        console.error("Error fetching games:", error);
+        res.status(500).send("Database error.");
+    }
+});
+
+
 // LISTENER
 
 app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
