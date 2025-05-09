@@ -19,7 +19,7 @@ app.use(express.json());
 
 // ROUTES
 // Home Page
-app.get('/',(req, res) => {
+app.get('/home',(req, res) => {
     res.render('home');
 });
 
