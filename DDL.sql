@@ -2,10 +2,11 @@
 
 -- Drop tables to avoid errors----------------
 DROP TABLE IF EXISTS GamesPlayed;
+DROP TABLE IF EXISTS PlayersFriends;
 DROP TABLE IF EXISTS Friends;
 DROP TABLE IF EXISTS Games;
 DROP TABLE IF EXISTS Players;
-DROP TABLE IF EXISTS PlayersFriends;
+
 
 -- Table for players-------------
 CREATE TABLE Players(
