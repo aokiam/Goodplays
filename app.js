@@ -37,7 +37,7 @@ app.get('/players', async (req, res) => {
 // Games page
 app.get('/games', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT games_id, title, genre, game_platform, release_date FROM Games;");
+        const [rows] = await db.query("SELECT game_id, title, genre, game_platform, release_date FROM Games;");
         res.render('games', { games: rows }); // Pass data to games.handlebars
     } catch (error) {
         console.error("Error fetching games:", error);
