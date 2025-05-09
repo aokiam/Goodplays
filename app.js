@@ -1,7 +1,7 @@
 // SETUP
 // Express
 const express = require('express');  // We are using the express library for the web server
-const handlebars = require('express-handlebars');
+const { engine } = require('express-handlebars');
 const app = express();               // We need to instantiate an express object to interact with the server in our code
 const PORT = 9400;     // Set a port number
 
@@ -9,7 +9,13 @@ const PORT = 9400;     // Set a port number
 const db = require('./db-connector');
 
 // Set handlebars as the view engine
-app.engine('handlebars', handlebars.engine());
+app.engine('handlebars', engine({
+    helpers:{
+        formatDate: function(date){
+            return new Date(date).toISOString().split('T')[0];
+        }
+    }
+}));
 app.set('view engine', 'handlebars');
 
 // Set the path to views and static files
@@ -19,7 +25,7 @@ app.use(express.json());
 
 // ROUTES
 // Home Page
-app.get('/home',(req, res) => {
+app.get('/',(req, res) => {
     res.render('home');
 });
 
@@ -61,5 +67,5 @@ app.get('/gamesplayed', async (req, res) => {
 // LISTENER
 
 app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
-    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
+    console.log('Express started on http://localhost:' + PORT + '; press Ctrl+C to terminate.')
 });

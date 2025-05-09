@@ -1,7 +1,6 @@
 <h2>Games</h2>
-<p><a href="/home">Home</a></p>
-<p><a href="/players">Players</a></p>
-<p><a href="/games">Games</a></p>
+<p><a href="/">Home </a><a href="/players">Players</a> <a href="/friends">Friends</a>
+<a href="/playersfriends">PlayersFriends</a> <a href="/games">Games</a> <a href="/gamesplayed">GamesPlayed</a></p>
 <table border="1">
     <thead>
         <tr>
@@ -19,7 +18,7 @@
             <td>{{this.title}}</td>
             <td>{{this.genre}}</td>
             <td>{{this.game_platform}}</td>
-            <td>{{this.release_date}}</td>
+            <td>{{formatDate this.release_date}}</td>
         </tr>
         {{/each}}
     </tbody>
