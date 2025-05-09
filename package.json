@@ -1,4 +1,9 @@
 {
+ "scripts": {
+    "development": "npx nodemon app.js",
+    "production": "npx forever start app.js",
+    "stop_production": "npx forever stop app.js"
+},
   "dependencies": {
     "express": "^5.1.0",
     "express-handlebars": "^8.0.1",

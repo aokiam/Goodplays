@@ -3,7 +3,7 @@
 const express = require('express');  // We are using the express library for the web server
 const { engine } = require('express-handlebars');
 const app = express();               // We need to instantiate an express object to interact with the server in our code
-const PORT = 9400;     // Set a port number
+const PORT = 19494;     // Set a port number
 
 // Database 
 const db = require('./db-connector');
