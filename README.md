@@ -6,6 +6,6 @@ A fun spin on the book catalog website <em>Goodreads</em>, Goodplays is a databa
 Shows understanding of database design, SQL, and normalization. 
 <br>
 <br>
-run the following to install all packages necessary: <br>
+<strong>Run the following to install all packages necessary:</strong> <br>
 npm install mysql2 express forever nodemon
-npm install express-handlebars
+npm install express-handlebars mysql2
