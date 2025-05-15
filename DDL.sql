@@ -34,6 +34,7 @@ CREATE TABLE Friends(
     FOREIGN KEY (initiated_by) REFERENCES Players(player_id) ON UPDATE CASCADE
 );
 
+
 -- Intersection table for PlayersFriends--------------
 CREATE TABLE PlayersFriends(
     friend_id INT NOT NULL,
@@ -68,7 +69,7 @@ VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
 -- Insert example data into the Friends table--------------
 INSERT INTO Friends (friend_id, initiated_by, date_added)
 VALUES (1, 1, NULL),
-       (2, 1, '2023-4-20'),
+       (2, 1, '2023-04-20'),
        (3, 3, NULL);
 
 -- Insert example data into the PlayerFriends table--------------

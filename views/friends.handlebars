@@ -15,7 +15,7 @@
         <tr>
             <td>{{this.friend_id}}</td>
             <td>{{this.initiated_by}}</td>
-            <td>{{this.date_added}}</td>
+            <td>{{formatDate this.date_added}}</td>
             <td><form method="POST" action="/delete-friend">
                 <button type="submit">Delete Player</button>
                 </form></td>

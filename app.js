@@ -12,6 +12,7 @@ const db = require('./db-connector');
 app.engine('handlebars', engine({
     helpers:{
         formatDate: function(date){
+            if (!date) return null;
             return new Date(date).toISOString().split('T')[0];
         }
     }
