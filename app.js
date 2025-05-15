@@ -66,7 +66,7 @@ app.get('/gamesplayed', async (req, res) => {
 // Friends page
 app.get('/friends', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT friend_id FROM Friends;");
+        const [rows] = await db.query("SELECT friend_id, initiated_by, date_added FROM Friends;");
         res.render('friends', { friends: rows }); // Pass data to friends.handlebars
     } catch (error) {
         console.error("Error fetching friends:", error);

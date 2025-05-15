@@ -28,7 +28,7 @@ CREATE TABLE Games(
 -- Table for friends--------------
 CREATE TABLE Friends(
     friend_id INT NOT NULL UNIQUE,
-    initiated_by INT NOT NULL UNIQUE,
+    initiated_by INT NOT NULL,
     date_added DATE,
     PRIMARY KEY (friend_id),
     FOREIGN KEY (initiated_by) REFERENCES Players(player_id) ON UPDATE CASCADE
@@ -66,7 +66,7 @@ VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
        ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
 
 -- Insert example data into the Friends table--------------
-INSERT INTO Friends (friend_id)
+INSERT INTO Friends (friend_id, initiated_by, date_added)
 VALUES (1, 1, NULL),
        (2, 1, '2023-4-20'),
        (3, 3, NULL);
@@ -84,12 +84,12 @@ INSERT INTO Games (title, genre, game_platform, release_date)
 VALUES ('Minecraft', 'Fantasy', 'PC, Mobile, Linux, Mac, Xbox One, Xbox Series X/S, Playstation 4/5', '2011-11-18'),
        ('The Sims 4', 'Simulation', 'PC, Mac, Playstation 4, Xbox One', '2015-02-17'),
        ('Monster Hunter Wilds', 'Action RPG', 'PC, Playstation 5, Xbox Series X/S', '2025-02-28'),
-       ('Metaphor Refantazio', 'JRPG', 'PC, Playstation 4/5, Xbox Series X/S', '2024-10-11'),
+       ('Metaphor: ReFantazio', 'JRPG', 'PC, Playstation 4/5, Xbox Series X/S', '2024-10-11'),
        ('World of Warcraft', 'Fantasy', 'PC, Mac, Android', '2004-11-23');
 
 -- Insert example data into the GamesPlayed table--------------
 INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)
 VALUES (1, 3, 'currently playing', 5.0, '2025-02-28', NULL, 326),
-       (2, 2, 'want to play', 4, '2024-12-17', NULL, 0),
+       (2, 2, 'want to play', NULL, NULL, NULL, 0),
        (3, 4, 'finished playing', 4.7, '2025-03-23', '2025-05-03', 100),
        (1, 1, 'finished playing', 3.5, '2020-06-27', '2020-08-17', 93);
