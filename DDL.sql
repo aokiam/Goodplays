@@ -90,7 +90,7 @@ VALUES ('Minecraft', 'Fantasy', 'PC, Mobile, Linux, Mac, Xbox One, Xbox Series X
 
 -- Insert example data into the GamesPlayed table--------------
 INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)
-VALUES (1, 3, 'currently playing', 5.0, '2025-02-28', NULL, 326),
+VALUES (1, 3, 'currently playing', 10.0, '2025-02-28', NULL, 326),
        (2, 2, 'want to play', NULL, NULL, NULL, 0),
-       (3, 4, 'finished playing', 4.7, '2025-03-23', '2025-05-03', 100),
-       (1, 1, 'finished playing', 3.5, '2020-06-27', '2020-08-17', 93);
+       (3, 4, 'finished playing', 9.4, '2025-03-23', '2025-05-03', 100),
+       (1, 1, 'finished playing', 5.5, '2020-06-27', '2020-08-17', 93);
