@@ -21,8 +21,8 @@ DELETE FROM Players WHERE player_id = @player_id;
 
 -- FRIENDS TABLE -------------------------------
 -- Insert into friends table
-INSERT INTO Friends(friend_id)
-VALUES(friend_id);
+INSERT INTO Friends(friend_id, initiated_by, date_added)
+VALUES(@friend_id, @initiated_by, @date_added);
 -- View all friend
 SELECT * FROM Friends;
 -- Delete a friend

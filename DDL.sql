@@ -27,7 +27,7 @@ CREATE TABLE Games(
 
 -- Table for friends--------------
 CREATE TABLE Friends(
-    friend_id INT NOT NULL UNIQUE,
+    friend_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     initiated_by INT NOT NULL,
     date_added DATE,
     PRIMARY KEY (friend_id),
@@ -67,10 +67,10 @@ VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
        ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
 
 -- Insert example data into the Friends table--------------
-INSERT INTO Friends (friend_id, initiated_by, date_added)
-VALUES (1, 1, NULL),
-       (2, 1, '2023-04-20'),
-       (3, 3, NULL);
+INSERT INTO Friends (initiated_by, date_added)
+VALUES (1, NULL),
+       (1, '2023-04-20'),
+       (3, NULL);
 
 -- Insert example data into the PlayerFriends table--------------
 INSERT INTO PlayersFriends (player_id, friend_id, status)
@@ -87,6 +87,7 @@ VALUES ('Minecraft', 'Fantasy', 'PC, Mobile, Linux, Mac, Xbox One, Xbox Series X
        ('Monster Hunter Wilds', 'Action RPG', 'PC, Playstation 5, Xbox Series X/S', '2025-02-28'),
        ('Metaphor: ReFantazio', 'JRPG', 'PC, Playstation 4/5, Xbox Series X/S', '2024-10-11'),
        ('World of Warcraft', 'Fantasy', 'PC, Mac, Android', '2004-11-23');
+
 
 -- Insert example data into the GamesPlayed table--------------
 INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)

@@ -24,8 +24,8 @@
             <td>{{this.game_id}}</td>
             <td>{{this.status}}</td>
             <td>{{this.rating}}</td>
-            <td>{{formatDate this.date_started}}</td>
-            <td>{{formatDate this.date_completed}}</td>
+            <td>{{this.format_date_started}}</td>
+            <td>{{this.format_date_completed}}</td>
             <td>{{this.hours_played}}</td>
             <td><form method="POST" action="/delete-gameplayed">
                 <button type="submit">delete</button>
