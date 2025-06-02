@@ -1,6 +1,3 @@
-http://localhost:9400/<br>
-<br>
-<br>
 <strong> Goodplays </strong> <br>
 Project for CS340: Introduction to Databases <br>
 By: Allyson Aoki and Janessa Moreno <br>
@@ -10,5 +7,5 @@ Shows understanding of database design, SQL, and normalization.
 <br>
 <br>
 <strong>Run the following to install all packages necessary:</strong> <br>
-npm install mysql2 express forever nodemon
+npm install mysql2 express forever nodemon <br>
 npm install express-handlebars mysql2

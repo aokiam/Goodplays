@@ -15,6 +15,7 @@
             <th>date_completed</th>
             <th>hours_played</th>
             <th>Delete a Game Played</th>
+            <th>Delete a Game Played</th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +28,12 @@
             <td>{{this.rating}}</td>
             <td>{{this.format_date_started}}</td>
             <td>{{this.format_date_completed}}</td>
+            <td>{{this.format_date_started}}</td>
+            <td>{{this.format_date_completed}}</td>
             <td>{{this.hours_played}}</td>
+            <td><form method="POST" action="/delete-gameplayed">
+                <button type="submit">delete</button>
+                </form></td>
             <td><form method="POST" action="/delete-gameplayed">
                 <button type="submit">delete</button>
                 </form></td>
@@ -38,6 +44,33 @@
 
 <h3>Add a New Game Played</h3>
 <form method="POST" action="/add-gameplayed">
+    <label for="player_id">Player ID:</label>
+    <select id="player_id" name="player_id">
+        {{#each gamesplayed}}
+            <option value="{{this.player_id}}">{{this.player_id}}</option>
+        {{/each}}
+    </select>
+    <label for="game_id">Game ID:</label>
+    <select id="game_id" name="game_id">
+        {{#each gamesplayed}}
+            <option value="{{this.game_id}}">{{this.game_id}}</option>
+        {{/each}}
+    </select><br>
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+        {{#each gamesplayed}}
+            <option value="{{this.status}}">{{this.status}}</option>
+        {{/each}}
+    </select><br>
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" name="rating" min="0" max="10" step="0.1"><br>
+    <label for="date_started">Date Started:</label>
+    <input type="date" id="date_started" name="date_started">
+    <label for="date_finished">Date Finished:</label>
+    <input type="date" id="date_finished" name="date_finished"><br>
+    <label for="hours_played">Hours Played:</label>
+    <input type="number" id="hours_played" name="hours_played" min="0"><br>
+    <button type="submit">Add Game Played</button>
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id">
         {{#each gamesplayed}}
@@ -76,7 +109,31 @@
             <option value="{{this.player_id}}">{{this.player_id}}</option>
         {{/each}}
     </select>
+    <select id="player_id" name="player_id">
+        {{#each gamesplayed}}
+            <option value="{{this.player_id}}">{{this.player_id}}</option>
+        {{/each}}
+    </select>
     <label for="game_id">Game ID:</label>
+    <select id="game_id" name="game_id">
+        {{#each gamesplayed}}
+            <option value="{{this.game_id}}">{{this.game_id}}</option>
+        {{/each}}
+    </select><br>
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+        {{#each gamesplayed}}
+            <option value="{{this.status}}">{{this.status}}</option>
+        {{/each}}
+    </select><br>
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" name="rating" min="0" max="10" step="0.1"><br>
+    <label for="date_started">Date Started:</label>
+    <input type="date" id="date_started" name="date_started">
+    <label for="date_finished">Date Finished:</label>
+    <input type="date" id="date_finished" name="date_finished"><br>
+    <label for="hours_played">Hours Played:</label>
+    <input type="number" id="hours_played" name="hours_played" min="0"><br>
     <select id="game_id" name="game_id">
         {{#each gamesplayed}}
             <option value="{{this.game_id}}">{{this.game_id}}</option>
