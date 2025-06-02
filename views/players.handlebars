@@ -1,6 +1,7 @@
 <h1>Players</h1>
 <p><a href="/">Home </a><a href="/players">Players</a> <a href="/friends">Friends</a>
-<a href="/playersfriends">PlayersFriends</a> <a href="/games">Games</a> <a href="/gamesplayed">GamesPlayed</a></p>
+<a href="/playersfriends">PlayersFriends</a> <a href="/games">Games</a> <a href="/gamesplayed">GamesPlayed</a><a href="/reset"></p>
+<p><a href="/reset"><strong>RESET</strong></a></p>
 <table border="1">
     <thead>
         <tr>
@@ -8,6 +9,7 @@
             <th>username</th>
             <th>email</th>
             <th>password</th>
+            <th>Delete a player</th>
         </tr>
     </thead>
     <tbody>
@@ -17,10 +19,17 @@
             <td>{{this.username}}</td>
             <td>{{this.email}}</td>
             <td>{{this.password}}</td>
+            <td><form method="POST" action="/delete">
+                <input type="hidden" name="player_id" value="{{this.player_id}}">
+                <button type="submit">delete</button>
+                </form></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+
+
+
 
 <h3>Add a New Player</h3>
 <form method="POST" action="/add-player">
@@ -39,20 +48,16 @@
 <h3>Edit a player</h3>
 <form method="POST" action="/edit-player">
     <label for="player_id">Player ID:</label>
-    <input type="text" id="player_id" name="Player_id"><br>
-
+    <select id="player_id" name="player_id">
+        {{#each players}}
+            <option value="{{this.player_id}}">{{this.player_id}}</option>
+        {{/each}}
+    </select><br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email"><br>
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password"><br>
     <button type="submit">Edit Player</button>
-</form>
-
-<h3>Delete a player</h3>
-<form method="POST" action="/delete-player">
-    <label for="player_id">Player ID:</label>
-    <input type="text" id="player_id" name="Player_id"><br>
-
-    <button type="submit">Delete Player</button>
-</form>
-
-<h3>View players</h3>
-<form method="POST" action="/view-players">
-    <button type="submit">View players</button>
 </form>

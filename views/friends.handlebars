@@ -1,40 +1,26 @@
 <h1>Friends</h1>
 <p><a href="/">Home </a><a href="/players">Players</a> <a href="/friends">Friends</a>
-<a href="/playersfriends">PlayersFriends</a> <a href="/games">Games</a> <a href="/gamesplayed">GamesPlayed</a></p>
+<a href="/playersfriends">PlayersFriends</a> <a href="/games">Games</a> <a href="/gamesplayed">GamesPlayed</a> </p>
+<p><a href="/reset"><strong>RESET</strong></a></p>
 <table border="1">
     <thead>
         <tr>
             <th>friend_id</th>
+            <th>initiated_by</th>
+            <th>date_added</th>
+            <th>Delete a friend</th>
         </tr>
     </thead>
     <tbody>
         {{#each friends}}
         <tr>
             <td>{{this.friend_id}}</td>
+            <td>{{this.initiated_by}}</td>
+            <td>{{this.format_date_added}}</td>
+            <td><form method="POST" action="/delete-friend">
+                <button type="submit">delete</button>
+                </form></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
-
-
-<h3>Add a New Friend</h3>
-<form method="POST" action="/add-friend">
-    <label for="friend_id">Friend ID:</label>
-    <input type="text" id="friend_id" name="friend_id"><br>
-
-    <button type="submit">Add Friend</button>
-</form>
-
-
-<h3>Delete a friend</h3>
-<form method="POST" action="/delete-friend">
-    <label for="friend_id">Friend ID:</label>
-    <input type="text" id="friend_id" name="friend_id"><br>
-
-    <button type="submit">Delete Player</button>
-</form>
-
-<h3>View Friends</h3>
-<form method="POST" action="/view-friends">
-    <button type="submit">View friends</button>
-</form>
