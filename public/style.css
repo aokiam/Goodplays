@@ -1,18 +1,32 @@
-/* Reset some default browser styles */
+/* Imports */
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unna:wght@700&display=swap');
+
+/* Variables */
+:root{
+    --lightest-brown: #f0ece3;
+    --light-brown: #d9c8b6;
+    --brown: #ad8466;
+    --dark-brown: #76563f;
+    --green: #646d52;
+    --dark-green: #303d2b;
+}
+
+
+/* Viewports */
 body, h1, h2, h3, p, table, form {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
     box-sizing: border-box;
 }
 
 body {
+    font-family: 'Nunito';
     background-color: #f9f9f9;
     padding: 20px;
     color: #333;
 }
 
 h1 {
+    font-family: 'Unna';
     margin-bottom: 1rem;
     font-size: 2rem;
     color: #222;
@@ -21,7 +35,7 @@ h1 {
 a {
     text-decoration: none;
     color: #007bff;
-    margin-right: 10px;
+    margin: 5px;
 }
 
 a:hover {
