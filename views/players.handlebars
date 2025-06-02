@@ -10,7 +10,6 @@
             <th>email</th>
             <th>password</th>
             <th>Delete a player</th>
-            <th>Delete a player</th>
         </tr>
     </thead>
     <tbody>
@@ -30,8 +29,6 @@
 </table>
 
 
-
-
 <h3>Add a New Player</h3>
 <form method="POST" action="/add-player">
     <label for="username">Username:</label>
@@ -49,17 +46,6 @@
 <h3>Edit a player</h3>
 <form method="POST" action="/edit-player">
     <label for="player_id">Player ID:</label>
-    <select id="player_id" name="player_id">
-        {{#each players}}
-            <option value="{{this.player_id}}">{{this.player_id}}</option>
-        {{/each}}
-    </select><br>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username"><br>
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email"><br>
-    <label for="password">Password:</label>
-    <input type="text" id="password" name="password"><br>
     <select id="player_id" name="player_id">
         {{#each players}}
             <option value="{{this.player_id}}">{{this.player_id}}</option>

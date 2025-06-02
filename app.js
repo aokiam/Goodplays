@@ -42,7 +42,6 @@ app.get('/players', async (req, res) => {
 app.get('/games', async (req, res) => {
     try {
         const [rows] = await db.query("SELECT game_id, title, genre, game_platform, DATE_FORMAT(release_date, '%Y-%m-%d') AS format_release_date FROM Games;");
-        const [rows] = await db.query("SELECT game_id, title, genre, game_platform, DATE_FORMAT(release_date, '%Y-%m-%d') AS format_release_date FROM Games;");
         res.render('games', { games: rows }); // Pass data to games.handlebars
     } catch (error) {
         console.error("Error fetching games:", error);
@@ -55,7 +54,6 @@ app.get('/games', async (req, res) => {
 app.get('/gamesplayed', async (req, res) => {
     try {
         const [rows] = await db.query("SELECT gameplayed_id, player_id, game_id, status, rating, DATE_FORMAT(date_started, '%Y-%m-%d') AS format_date_started, DATE_FORMAT(date_completed, '%Y-%m-%d') AS format_date_completed, hours_played FROM GamesPlayed;");
-        const [rows] = await db.query("SELECT gameplayed_id, player_id, game_id, status, rating, DATE_FORMAT(date_started, '%Y-%m-%d') AS format_date_started, DATE_FORMAT(date_completed, '%Y-%m-%d') AS format_date_completed, hours_played FROM GamesPlayed;");
         res.render('gamesplayed', { gamesplayed: rows }); // Pass data to gamesplayed.handlebars
     } catch (error) {
         console.error("Error fetching gamesplayed:", error);
@@ -67,9 +65,6 @@ app.get('/gamesplayed', async (req, res) => {
 app.get('/friends', async (req, res) => {
     try {
         const [rows] = await db.query("SELECT friend_id, initiated_by, DATE_FORMAT(date_added, '%Y-%m-%d') AS format_date_added FROM Friends;");
-        console.log(rows);
-        const [rows] = await db.query("SELECT friend_id, initiated_by, DATE_FORMAT(date_added, '%Y-%m-%d') AS format_date_added FROM Friends;");
-        console.log(rows);
         res.render('friends', { friends: rows }); // Pass data to friends.handlebars
     } catch (error) {
         console.error("Error fetching friends:", error);

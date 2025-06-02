@@ -9,20 +9,12 @@
             <th>initiated_by</th>
             <th>date_added</th>
             <th>Delete a friend</th>
-            <th>initiated_by</th>
-            <th>date_added</th>
-            <th>Delete a friend</th>
         </tr>
     </thead>
     <tbody>
         {{#each friends}}
         <tr>
             <td>{{this.friend_id}}</td>
-            <td>{{this.initiated_by}}</td>
-            <td>{{this.format_date_added}}</td>
-            <td><form method="POST" action="/delete-friend">
-                <button type="submit">delete</button>
-                </form></td>
             <td>{{this.initiated_by}}</td>
             <td>{{this.format_date_added}}</td>
             <td><form method="POST" action="/delete-friend">
