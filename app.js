@@ -8,6 +8,7 @@ const { engine } = require('express-handlebars');
 const app = express();               // We need to instantiate an express object to interact with the server in our code
 const PORT = 19494;     // Set a port number
 
+
 // Database 
 const db = require('./db-connector');
 
@@ -17,9 +18,10 @@ app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
 // Set the path to views and static files
-app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
+app.use(express.static('public'));
+
 
 // ROUTES
 // Home Page
