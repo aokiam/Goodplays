@@ -20,51 +20,78 @@ body, h1, h2, h3, p, table, form {
 
 body {
     font-family: 'Nunito';
-    background-color: #f9f9f9;
+    background-color: var(--lightest-brown);
     padding: 20px;
-    color: #333;
+    color: var(--dark-green);
 }
+
 
 h1 {
     font-family: 'Unna';
-    margin-bottom: 1rem;
-    font-size: 2rem;
-    color: #222;
+    font-size: 40px;
+    color: var(--dark-green);
+    text-align: center;
+    background-color: var(--light-brown);
+    max-width: 1920px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 0%;
+}
+h2, h3 {
+    font-family: 'Unna';
+    font-size: 25px;
+    color: var(--dark-green);
+    text-align: center;
+        background-color: var(--light-brown);
+    max-width: 1920px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 50px;
+}
+
+p {
+    text-align: center;
 }
 
 a {
     text-decoration: none;
-    color: #007bff;
+    color: var(--green);
     margin: 5px;
+    align-items: center;
 }
 
 a:hover {
     text-decoration: underline;
+    color: var(--dark-green);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2rem;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+    background-color: var(--light-brown);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 th, td {
     padding: 10px 15px;
-    text-align: left;
-    border: 1px solid #ddd;
+    text-align: center;
+    border: 1px solid var(--brown);
 }
 
 th {
-    background-color: #f1f1f1;
+    background-color: var(--brown);
 }
 
 form {
-    margin-top: 1rem;
+    margin-top: 10px;
+    text-align: center;
 }
-
-input[type="text"], input[type="number"], select {
+ul{
+    text-align: left center;
+    list-style-position: inside;
+}
+input[type="text"], input[type="number"], input[type="date"], select {
     padding: 8px;
     width: 250px;
     margin-bottom: 10px;
@@ -74,15 +101,15 @@ input[type="text"], input[type="number"], select {
 
 button {
     padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--green);
+    color: var(--lightest-brown);
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: var(--dark-green);
 }
 
 .container {

@@ -34,24 +34,18 @@
         {{#each playersfriends}}
             <option value="{{this.player_id}}">{{this.player_id}}</option>
         {{/each}}
-    </select>
+    </select><br>
     <label for="friend_id">Friend ID:</label>
     <select id="friend_id" name="friend_id">
         {{#each playersfriends}}
             <option value="{{this.friend_id}}">{{this.friend_id}}</option>
         {{/each}}
-    </select>
+    </select><br>
     <label for="status">Status:</label>
     <select id="status" name="status">
         {{#each playersfriends}}
             <option value="{{this.status}}">{{this.status}}</option>
         {{/each}}
-    </select>
-    <label for="status">Status:</label>
-    <select id="status" name="status">
-        {{#each playersfriends}}
-            <option value="{{this.status}}">{{this.status}}</option>
-        {{/each}}
-    </select>
+    </select><br>
     <button type="submit">Edit PlayersFriends</button>
 </form>
