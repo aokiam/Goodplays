@@ -14,7 +14,6 @@ const db = require('./db-connector');
 
 // Set handlebars as the view engine
 app.engine('handlebars', engine());
-app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
 // Set the path to views and static files
@@ -73,6 +72,30 @@ app.get('/friends', async (req, res) => {
     } catch (error) {
         console.error("Error fetching friends:", error);
         res.status(500).send("Database error.");
+    }
+});
+
+// Adding a friend 
+app.post('/add-friend', async (req, res) => {
+    const { player1_id, player2_id } = req.body;
+    try {
+        await db.query(`INSERT INTO Friends (initiated_by, date_added) VALUES (?, NOW());`, [player1_id]);
+        res.redirect('/friends');
+    } catch (error) {
+        console.error("Error adding friend:", error);
+        res.status(500).send("Error adding friend.");
+    }
+});
+
+//Updating a friend
+app.post('/update-friend', async (req, res) => {
+    const { friend_id, initiated_by } = req.body;
+    try {
+        await db.query('UPDATE Friends SET initiated_by = ? WHERE friend_id = ?', [initiated_by, friend_id]);
+        res.redirect('/friends');
+    } catch (error) {
+        console.error("Error updating friend:", error);
+        res.status(500).send("Error updating friend.");
     }
 });
 
