@@ -66,9 +66,10 @@ app.get('/gamesplayed', async (req, res) => {
 // Friends page
 app.get('/friends', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT friend_id, initiated_by, DATE_FORMAT(date_added, '%Y-%m-%d') AS format_date_added FROM Friends;");
-        const [players] = await db.query  ("SELECT player_id, username FROM Players;");
-        res.render('friends', { friends: rows, players: players}); // Pass data to friends.handlebars
+        const [rows] = await db.query("SELECT Friends.friend_id, Friends.initiated_by,Players.username AS initiated_username, DATE_FORMAT(Friends.date_added, '%Y-%m-%d') AS format_date_added 
+        FROM Friends
+        JOIN Players ON Friends.initiated_by = Players.player_id;");
+        res.render('friends', { friends: rows }); // Pass data to friends.handlebars
     } catch (error) {
         console.error("Error fetching friends:", error);
         res.status(500).send("Database error.");
