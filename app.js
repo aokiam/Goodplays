@@ -76,6 +76,19 @@ app.get('/friends', async (req, res) => {
     }
 });
 
+//Deleting a friend
+app.post('/delete-friend', async (req, res) => {
+    const { friend_id } = req.body;
+    try {
+        await db.query('DELETE FROM PlayersFriends WHERE player_id = ? OR friend_id = ?', [friend_id, friend_id]);
+        await db.query('DELETE FROM Friends WHERE friend_id = ?', [friend_id]);
+        res.redirect('/friends');
+    } catch (error) {
+        console.error("Error deleting friend:", error);
+        res.status(500).send("Error deleting friend.");
+    }
+});
+
 // Friends page
 app.get('/playersfriends', async (req, res) => {
     try {
