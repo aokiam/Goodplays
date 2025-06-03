@@ -20,8 +20,9 @@
             <td>{{this.initiated_username}}</td>
             <td>{{this.format_date_added}}</td>
             <td><form method="POST" action="/delete-friend">
-                <button type="submit">delete</button>
-                </form></td>
+            <input type="hidden" name="friend_id" value="{{this.friend_id}}">
+            <button type="submit">delete</button>
+            </form></td>
         </tr>
         {{/each}}
     </tbody>
