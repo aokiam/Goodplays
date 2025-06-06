@@ -18,9 +18,11 @@
             <td>{{this.player_id}}</td>
             <td>{{this.friend_id}}</td>
             <td>{{this.status}}</td>
-            <td><form method="POST" action="/delete-playersfriends">
+            <td><form method="POST" action="/deleteplayersfriends">
+                <input type="hidden" name="players_id" value="{{this.player_id}}">
                 <button type="submit">delete</button>
                 </form></td>
+        </tr>
         </tr>
         {{/each}}
     </tbody>
@@ -32,13 +34,13 @@
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id">
         {{#each playersfriends}}
-            <option value="{{this.player_id}}">{{this.player_id}}</option>
+            <option value="{{this.player_id}}: {{this.username}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="friend_id">Friend ID:</label>
     <select id="friend_id" name="friend_id">
         {{#each playersfriends}}
-            <option value="{{this.friend_id}}">{{this.friend_id}}</option>
+            <option value="{{this.friend_id}}: {{this.username}}">{{this.friend_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="status">Status:</label>

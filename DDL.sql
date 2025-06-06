@@ -22,7 +22,6 @@ CREATE TABLE Games(
     title VARCHAR(200) NOT NULL,
     genre VARCHAR(50) NOT NULL,
     game_platform VARCHAR(255) NOT NULL,
-    game_platform VARCHAR(255) NOT NULL,
     release_date DATE NOT NULL
 );
 
@@ -31,10 +30,10 @@ CREATE TABLE Friends(
     friend_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     -- indicates the playerID of who requested to add the other player
     -- e.g. friend request initiated by player id 1 (going out to player id 3)
-    initiated_by INT NOT NULL,
+    initiated_by VARCHAR(25) NOT NULL,
     date_added DATE,
     PRIMARY KEY (friend_id),
-    FOREIGN KEY (initiated_by) REFERENCES Players(player_id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (initiated_by) REFERENCES Players(username) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
@@ -55,7 +54,6 @@ CREATE TABLE GamesPlayed(
     player_id INT NOT NULL,
     game_id INT NOT NULL,
     status ENUM('finished playing', 'currently playing', 'want to play'),
-    status ENUM('finished playing', 'currently playing', 'want to play'),
     rating DECIMAL(3,1) CHECK (rating >= 0 AND rating <= 10),
     date_started DATE,
     date_completed DATE,
@@ -73,13 +71,10 @@ VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
 
 -- Insert example data into the Friends table--------------
 INSERT INTO Friends (initiated_by, date_added)
-VALUES (1, NULL),
-       (1, '2023-04-20'),
-       (3, NULL);
-INSERT INTO Friends (initiated_by, date_added)
-VALUES (1, NULL),
-       (1, '2023-04-20'),
-       (3, NULL);
+VALUES ('gamer_kid', NULL),
+       ('gamer_kid', '2023-04-20'),
+       ('tetrislover99', NULL);
+
 
 -- Insert example data into the PlayerFriends table--------------
 INSERT INTO PlayersFriends (player_id, friend_id, status)
@@ -91,12 +86,6 @@ VALUES (1, 2, 'declined'),
 
 -- Insert example data into the Games table--------------
 INSERT INTO Games (title, genre, game_platform, release_date)
-VALUES ('Minecraft', 'Fantasy', 'PC, Mobile, Linux, Mac, Xbox One, Xbox Series X/S, Playstation 4/5', '2011-11-18'),
-       ('The Sims 4', 'Simulation', 'PC, Mac, Playstation 4, Xbox One', '2015-02-17'),
-       ('Monster Hunter Wilds', 'Action RPG', 'PC, Playstation 5, Xbox Series X/S', '2025-02-28'),
-       ('Metaphor: ReFantazio', 'JRPG', 'PC, Playstation 4/5, Xbox Series X/S', '2024-10-11'),
-       ('World of Warcraft', 'Fantasy', 'PC, Mac, Android', '2004-11-23');
-
 VALUES ('Minecraft', 'Fantasy', 'PC, Mobile, Linux, Mac, Xbox One, Xbox Series X/S, Playstation 4/5', '2011-11-18'),
        ('The Sims 4', 'Simulation', 'PC, Mac, Playstation 4, Xbox One', '2015-02-17'),
        ('Monster Hunter Wilds', 'Action RPG', 'PC, Playstation 5, Xbox Series X/S', '2025-02-28'),

@@ -109,4 +109,3 @@ FROM PlayersFriends pf
 JOIN Players p1 ON pf.player_id = p1.player_id
 JOIN Friends f ON pf.friend_id = f.friend_id
 JOIN Players p2 ON f.initiated_by = p2.player_id;
-

@@ -18,7 +18,7 @@
             <td>{{this.username}}</td>
             <td>{{this.email}}</td>
             <td>{{this.password}}</td>
-            <td><form method="POST" action="/delete">
+            <td><form method="POST" action="/deleteplayer">
                 <input type="hidden" name="player_id" value="{{this.player_id}}">
                 <button type="submit">delete</button>
                 </form></td>
@@ -47,7 +47,7 @@
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id">
         {{#each players}}
-            <option value="{{this.player_id}}">{{this.player_id}}</option>
+            <option value="{{this.player_id}}: {{this.username}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="username">Username:</label>

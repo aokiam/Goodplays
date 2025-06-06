@@ -28,7 +28,8 @@
             <td>{{this.format_date_started}}</td>
             <td>{{this.format_date_completed}}</td>
             <td>{{this.hours_played}}</td>
-            <td><form method="POST" action="/delete-gameplayed">
+            <td><form method="POST" action="/deletegamesplayed">
+                <input type="hidden" name="gameplayed_id" value="{{this.gameplayed_id}}">
                 <button type="submit">delete</button>
                 </form></td>
         </tr>

@@ -14,6 +14,7 @@ const db = require('./db-connector');
 
 // Set handlebars as the view engine
 app.engine('handlebars', engine());
+app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
 // Set the path to views and static files
@@ -65,7 +66,7 @@ app.get('/gamesplayed', async (req, res) => {
 // Friends page
 app.get('/friends', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT Friends.friend_id, Friends.initiated_by,Players.username AS initiated_username, DATE_FORMAT(Friends.date_added, '%Y-%m-%d') AS format_date_added FROM Friends JOIN Players ON Friends.initiated_by = Players.player_id;");
+        const [rows] = await db.query("SELECT friend_id, initiated_by, DATE_FORMAT(date_added, '%Y-%m-%d') AS format_date_added FROM Friends;");
         res.render('friends', { friends: rows }); // Pass data to friends.handlebars
     } catch (error) {
         console.error("Error fetching friends:", error);
@@ -73,47 +74,15 @@ app.get('/friends', async (req, res) => {
     }
 });
 
-// Adding a friend 
-app.post('/add-friend', async (req, res) => {
-    const { player1_id, player2_id } = req.body;
-    try {
-        await db.query(`INSERT INTO Friends (initiated_by, date_added) VALUES (?, NOW());`, [player1_id]);
-        res.redirect('/friends');
-    } catch (error) {
-        console.error("Error adding friend:", error);
-        res.status(500).send("Error adding friend.");
-    }
-});
-
-//Updating a friend
-app.post('/update-friend', async (req, res) => {
-    const { friend_id, initiated_by } = req.body;
-    try {
-        await db.query('UPDATE Friends SET initiated_by = ? WHERE friend_id = ?', [initiated_by, friend_id]);
-        res.redirect('/friends');
-    } catch (error) {
-        console.error("Error updating friend:", error);
-        res.status(500).send("Error updating friend.");
-    }
-});
-
-//Deleting a friend
-app.post('/delete-friend', async (req, res) => {
-    const { friend_id } = req.body;
-    try {
-        await db.query('DELETE FROM PlayersFriends WHERE player_id = ? OR friend_id = ?', [friend_id, friend_id]);
-        await db.query('DELETE FROM Friends WHERE friend_id = ?', [friend_id]);
-        res.redirect('/friends');
-    } catch (error) {
-        console.error("Error deleting friend:", error);
-        res.status(500).send("Error deleting friend.");
-    }
-});
-
-// Friends page
+// PlayersFriends page
 app.get('/playersfriends', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT player_id, friend_id, status FROM PlayersFriends;");
+        const [rows] = await db.query(`SELECT pf.player_id, pf.friend_id, pf.status,
+                                            p1.username AS player_username,
+                                            p2.username AS friend_username
+                                        FROM PlayersFriends AS pf
+                                        JOIN Players p1 ON pf.player_id = p1.player_id
+                                        JOIN Players p2 ON pf.friend_id = p2.player_id;`);
         res.render('playersfriends', { playersfriends: rows }); // Pass data to playersfriends.handlebars
     } catch (error) {
         console.error("Error fetching playersfriends:", error);
@@ -132,8 +101,8 @@ app.get('/reset', async (req, res) => {
     }
 });
 
-// Delete test to veryify reset works
-app.post('/delete', async (req, res) => {
+// Delete player
+app.post('/deleteplayer', async (req, res) => {
     const playerID = req.body.player_id;
     try {
         await db.query(`CALL DeletePlayer(?);`, [playerID]);
@@ -144,6 +113,61 @@ app.post('/delete', async (req, res) => {
         res.status(500).send('Delete failed.');
     }
 });
+
+// Delete friend
+app.post('/deletefriend', async (req, res) => {
+    const friendID = req.body.friend_id;
+    try {
+        await db.query(`CALL DeleteFriend(?);`, [friendID]);
+        res.redirect('/friends');
+        console.log('Deleting friend_id:', friendID);
+    } catch (error) {
+        console.error('Error running delete:', error);
+        res.status(500).send('Delete failed.');
+    }
+});
+
+// Delete player
+app.post('/deleteplayersfriends', async (req, res) => {
+    const playerID = req.body.player_id;
+    try {
+        await db.query(`CALL DeletePlayersFriends(?);`, [playerID]);
+        res.redirect('/playersfriends');
+        console.log('Deleting player_id:', playerID);
+    } catch (error) {
+        console.error('Error running delete:', error);
+        res.status(500).send('Delete failed.');
+    }
+});
+
+
+// Delete game
+app.post('/deletegame', async (req, res) => {
+    const gameID = req.body.game_id;
+    try {
+        await db.query(`CALL DeleteGame(?);`, [gameID]);
+        res.redirect('/games');
+        console.log('Deleting game_id:', gameID);
+    } catch (error) {
+        console.error('Error running delete:', error);
+        res.status(500).send('Delete failed.');
+    }
+});
+
+// Delete gamesplayed
+app.post('/deletegamesplayed', async (req, res) => {
+    const gameplayedID = req.body.gameplayed_id;
+    try {
+        await db.query(`CALL DeleteGamesPlayed(?);`, [gameplayedID]);
+        res.redirect('/gamesplayed');
+        console.log('Deleting gamesplayed_id:', gameplayedID);
+    } catch (error) {
+        console.error('Error running delete:', error);
+        res.status(500).send('Delete failed.');
+    }
+});
+
+
 
 // LISTENER
 

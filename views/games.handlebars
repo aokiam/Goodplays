@@ -21,9 +21,11 @@
             <td>{{this.genre}}</td>
             <td>{{this.game_platform}}</td>
             <td>{{this.format_release_date}}</td>
-            <td><form method="POST" action="/delete-game">
+            <td><form method="POST" action="/deletegame">
+                <input type="hidden" name="game_id" value="{{this.game_id}}">
                 <button type="submit">delete</button>
                 </form></td>
+        </tr>
         </tr>
         {{/each}}
     </tbody>
