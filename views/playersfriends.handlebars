@@ -6,6 +6,7 @@
 <table border="1">
     <thead>
         <tr>
+            <th>friendslist_id</th>
             <th>player_id</th>
             <th>friend_id</th>
             <th>status</th>
@@ -15,11 +16,12 @@
     <tbody>
         {{#each playersfriends}}
         <tr>
+            <td>{{this.friendslist_id}}</td>
             <td>{{this.player_id}}</td>
             <td>{{this.friend_id}}</td>
             <td>{{this.status}}</td>
             <td><form method="POST" action="/deleteplayersfriends">
-                <input type="hidden" name="players_id" value="{{this.player_id}}">
+                <input type="hidden" name="friendslist_id" value="{{this.friendslist_id}}">
                 <button type="submit">delete</button>
                 </form></td>
         </tr>
@@ -30,23 +32,18 @@
 
 
 <h3>Edit a playersfriends</h3>
-<form method="POST" action="/edit-playersfriends">
-    <label for="player_id">Player ID:</label>
-    <select id="player_id" name="player_id">
+<form method="POST" action="/editplayersfriends">
+    <label for="friendslist_id">FriendsList ID:</label>
+    <select id="friendlist_id" name="friendslist_id">
         {{#each playersfriends}}
-            <option value="{{this.player_id}}: {{this.username}}">{{this.player_id}}: {{this.username}}</option>
+            <option value="{{this.friendslist_id}}">{{this.friendslist_id}}: {{this.player_username}} + {{this.friend_username}}</option>
         {{/each}}
     </select><br>
-    <label for="friend_id">Friend ID:</label>
-    <select id="friend_id" name="friend_id">
-        {{#each playersfriends}}
-            <option value="{{this.friend_id}}: {{this.username}}">{{this.friend_id}}: {{this.username}}</option>
-        {{/each}}
-    </select><br>
+
     <label for="status">Status:</label>
     <select id="status" name="status">
-        {{#each playersfriends}}
-            <option value="{{this.status}}">{{this.status}}</option>
+        {{#each statuses}}
+            <option value="{{this}}">{{this}}</option>
         {{/each}}
     </select><br>
     <button type="submit">Edit PlayersFriends</button>

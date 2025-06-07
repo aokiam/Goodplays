@@ -91,7 +91,7 @@ ul{
     text-align: left center;
     list-style-position: inside;
 }
-input[type="text"], input[type="number"], input[type="date"], select {
+input[type="text"], input[type="number"], input[type="date"], input[type="email"], input[type="password"], select {
     padding: 8px;
     width: 250px;
     margin-bottom: 10px;

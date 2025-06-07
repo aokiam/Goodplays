@@ -29,15 +29,15 @@
 
 
 <h3>Add a New Player</h3>
-<form method="POST" action="/add-player">
+<form method="POST" action="/addplayer">
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username"><br>
+    <input type="text" id="username" name="username" required><br>
 
     <label for="email">Email:</label>
-    <input type="text" id="email" name="email"><br>
+    <input type="email" id="email" name="email" required><br>
 
     <label for="password">Password:</label>
-    <input type="text" id="password" name="password"><br>
+    <input type="password" id="password" name="password" required><br>
 
     <button type="submit">Add Player</button>
 </form>
@@ -47,7 +47,7 @@
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id">
         {{#each players}}
-            <option value="{{this.player_id}}: {{this.username}}">{{this.player_id}}: {{this.username}}</option>
+            <option value="{{this.player_id}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="username">Username:</label>

@@ -5,8 +5,9 @@
 <table border="1">
     <thead>
         <tr>
-            <th>friend_id</th>
+            <th>friendslist_id</th>
             <th>initiated_by</th>
+            <th>friend_added</th>
             <th>date_added</th>
             <th>Delete a friend</th>
         </tr>
@@ -14,14 +15,35 @@
     <tbody>
         {{#each friends}}
         <tr>
-            <td>{{this.friend_id}}</td>
+            <td>{{this.friendslist_id}}</td>
             <td>{{this.initiated_by}}</td>
+            <td>{{this.friend_added}}</td>
             <td>{{this.format_date_added}}</td>
             <td><form method="POST" action="/deletefriend">
-                <input type="hidden" name="friend_id" value="{{this.friend_id}}">
+                <input type="hidden" name="friendslist_id" value="{{this.friendslist_id}}">
                 <button type="submit">delete</button>
                 </form></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+
+<h3>Add a Friend</h3>
+<form method="POST" action="/add-friend">
+    <label for="initiated_by">Initiated By:</label>
+    <select id="initiated_by" name="initiated_by">
+        {{#each players}}
+            <option value="{{this.player_id}}">{{this.username}}</option>
+        {{/each}}
+    </select><br>
+    <label for="friend_added">Friend Added:</label>
+    <select id="friend_added" name="friend_added">
+        {{#each players}}
+            <option value="{{this.player_id}}">{{this.username}}</option>
+        {{/each}}
+    </select><br>
+    <label for="release_date">Date Added:</label>
+    <input type="date" id="date_added" name="date_added"><br>
+    <button type="submit">Add Friend</button>
+</form>
+

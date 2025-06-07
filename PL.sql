@@ -1,9 +1,10 @@
 DELIMITER //
 
+-- RESET DATABASE --------------------------------------------------------------------------------------------
 CREATE PROCEDURE ResetGoodplays()
 BEGIN
     SET FOREIGN_KEY_CHECKS = 0;
--- clear data in the tables
+-- clear data in the tables 
     TRUNCATE TABLE Players;
     TRUNCATE TABLE Friends;
     TRUNCATE TABLE PlayersFriends;
@@ -17,17 +18,17 @@ VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
        ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
 
 -- Insert example data into the Friends table--------------
-INSERT INTO Friends (initiated_by, date_added)
-VALUES ('gamer_kid', NULL),
-       ('gamer_kid', '2023-04-20'),
-       ('tetrislover99', NULL);
+INSERT INTO Friends (initiated_by, friend_added, date_added)
+VALUES (1, 2, NULL),
+       (1, 3, '2023-04-20'),
+       (3, 2, NULL);
 
 
 -- Insert example data into the PlayerFriends table--------------
-INSERT INTO PlayersFriends (player_id, friend_id, status)
-VALUES (1, 2, 'declined'),
-       (2, 1, 'accepted'),
-       (3, 2, 'pending');
+INSERT INTO PlayersFriends (friendslist_id, player_id, friend_id, status)
+VALUES (1, 1, 2, 'declined'),
+       (2, 1, 3, 'accepted'),
+       (3, 3, 2, 'pending');
 
 
 
@@ -49,8 +50,8 @@ VALUES (1, 3, 'currently playing', 10.0, '2025-02-28', NULL, 326),
 
 END //
 
--- delete CRUD procedures
--- delete all instances of players with the given pid
+-- DELETE CRUD PROCEDURES ------------------------------------------------------------------------------------
+-- delete all instances of players with the given pid -------------------------
 CREATE PROCEDURE DeletePlayer(IN pid INT)
 BEGIN
     DECLARE uname VARCHAR(25);
@@ -68,16 +69,28 @@ BEGIN
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
--- delete all instances of friends with the given fid
+-- delete all instances of friends with the given fid ----------------------------
 CREATE PROCEDURE DeleteFriend(IN fid INT)
 BEGIN
-    DELETE FROM Friends WHERE friend_id = fid;
-    DELETE FROM PlayersFriends WHERE friend_id = fid;
+    DECLARE player INT;
+    DECLARE friend INT;
+
+    -- get player and friend involved from the Friends table
+    SELECT p1.player_id, p2.player_id
+    INTO player, friend
+    FROM Friends f
+    JOIN Players p1 ON f.initiated_by = p1.username
+    JOIN Players p2 ON f.friend_added = p2.username
+    WHERE f.friendslist_id = fid;
+
+    DELETE FROM Friends WHERE friendslist_id = fid;
+    DELETE FROM PlayersFriends
+    WHERE (player_id = player AND friend_id = friend) OR (player_id = friend AND friend_id = player);
 
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
--- delete all instances of games with the given gid
+-- delete all instances of games with the given gid -----------------------
 CREATE PROCEDURE DeleteGame(IN gid INT)
 BEGIN
     DELETE FROM Games WHERE game_id = gid;
@@ -85,25 +98,16 @@ BEGIN
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
--- delete all instances of playersfriends with the given pfid
+-- delete all instances of playersfriends with the given pfid ---------------------------
 CREATE PROCEDURE DeletePlayersFriends(IN pfid INT)
 BEGIN
-    DECLARE uname VARCHAR(25);
-
-    -- Get username associated with pid
-    SELECT username INTO uname
-    FROM `Players`
-    WHERE player_id = pfid;
-
     -- delete all records associated with pfid
-    DELETE FROM PlayersFriends WHERE player_id = pfid;
-    DELETE FROM Friends WHERE initiated_by = uname;
-    DELETE FROM Players WHERE player_id = pfid;
-    DELETE FROM GamesPlayed WHERE player_id = pfid;
+    DELETE FROM PlayersFriends WHERE friendslist_id = pfid;
+    DELETE FROM Friends WHERE friendslist_id = pfid;
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
--- delete all gamesplayed with the given gpid
+-- delete all gamesplayed with the given gpid ---------------------------
 CREATE PROCEDURE DeleteGamesPlayed(IN gpid INT)
 BEGIN
     DECLARE pid INT;
@@ -129,4 +133,10 @@ BEGIN
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
+
+-- ADD CRUD PROCEDURES ---------------------------------------------------------------------------------------
+
+
+
+-- EDIT CRUD PROCEDURES --------------------------------------------------------------------------------------
 DELIMITER ;

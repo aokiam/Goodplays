@@ -1,4 +1,4 @@
--- DDL.SQL created by Janessa Moreno and Allyson Aoki.------------
+-- DDL.SQL created by Allyson Aoki and Janessa Moreno------------
 
 -- Drop tables to avoid errors----------------
 DROP TABLE IF EXISTS GamesPlayed;
@@ -27,25 +27,29 @@ CREATE TABLE Games(
 
 -- Table for friends--------------
 CREATE TABLE Friends(
-    friend_id INT NOT NULL UNIQUE AUTO_INCREMENT,
+    friendslist_id INT NOT NULL UNIQUE AUTO_INCREMENT,
     -- indicates the playerID of who requested to add the other player
     -- e.g. friend request initiated by player id 1 (going out to player id 3)
-    initiated_by VARCHAR(25) NOT NULL,
+    initiated_by INT NOT NULL,
+    friend_added INT NOT NULL,
     date_added DATE,
-    PRIMARY KEY (friend_id),
-    FOREIGN KEY (initiated_by) REFERENCES Players(username) ON UPDATE CASCADE ON DELETE CASCADE
+    PRIMARY KEY (friendslist_id),
+    FOREIGN KEY (initiated_by) REFERENCES Players(player_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (friend_added) REFERENCES Players(player_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 
 -- Intersection table for PlayersFriends--------------
 CREATE TABLE PlayersFriends(
+    friendslist_id INT NOT NULL,
     friend_id INT NOT NULL,
     player_id INT NOT NULL, 
     status ENUM ('pending', 'accepted', 'blocked', 'declined') NOT NULL,
     PRIMARY KEY (player_id, friend_id),
+    FOREIGN KEY (friendslist_id) REFERENCES Friends(friendslist_id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (player_id) REFERENCES Players(player_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (friend_id) REFERENCES Friends(friend_id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (friend_id) REFERENCES Players(player_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Table for GamesPlayed--------------
@@ -70,17 +74,17 @@ VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
        ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
 
 -- Insert example data into the Friends table--------------
-INSERT INTO Friends (initiated_by, date_added)
-VALUES ('gamer_kid', NULL),
-       ('gamer_kid', '2023-04-20'),
-       ('tetrislover99', NULL);
+INSERT INTO Friends (initiated_by, friend_added, date_added)
+VALUES (1, 2, NULL),
+       (1, 3, '2023-04-20'),
+       (3, 2, NULL);
 
 
 -- Insert example data into the PlayerFriends table--------------
-INSERT INTO PlayersFriends (player_id, friend_id, status)
-VALUES (1, 2, 'declined'),
-       (2, 1, 'accepted'),
-       (3, 2, 'pending');
+INSERT INTO PlayersFriends (friendslist_id, player_id, friend_id, status)
+VALUES (1, 1, 2, 'declined'),
+       (2, 1, 3, 'accepted'),
+       (3, 3, 2, 'pending');
 
 
 

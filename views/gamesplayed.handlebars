@@ -38,22 +38,22 @@
 </table>
 
 <h3>Add a New Game Played</h3>
-<form method="POST" action="/add-gameplayed">
+<form method="POST" action="/addgameplayed">
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id">
-        {{#each gamesplayed}}
-            <option value="{{this.player_id}}">{{this.player_id}}</option>
+        {{#each players}}
+            <option value="{{this.player_id}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="game_id">Game ID:</label>
     <select id="game_id" name="game_id">
-        {{#each gamesplayed}}
-            <option value="{{this.game_id}}">{{this.game_id}}</option>
+        {{#each games}}
+            <option value="{{this.game_id}}">{{this.game_id}}: {{this.title}}</option>
         {{/each}}
     </select><br>
     <label for="status">Status:</label>
     <select id="status" name="status">
-        {{#each gamesplayed}}
+        {{#each statuses}}
             <option value="{{this.status}}">{{this.status}}</option>
         {{/each}}
     </select><br>
@@ -70,22 +70,22 @@
 
 
 <h3>Edit a Game Played</h3>
-<form method="POST" action="/edit-gameplayed">
+<form method="POST" action="/editgameplayed">
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id">
-        {{#each gamesplayed}}
-            <option value="{{this.player_id}}">{{this.player_id}}</option>
+        {{#each players}}
+            <option value="{{this.player_id}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="game_id">Game ID:</label>
     <select id="game_id" name="game_id">
-        {{#each gamesplayed}}
-            <option value="{{this.game_id}}">{{this.game_id}}</option>
+        {{#each games}}
+            <option value="{{this.game_id}}">{{this.game_id}}: {{this.title}}</option>
         {{/each}}
     </select><br>
     <label for="status">Status:</label>
     <select id="status" name="status">
-        {{#each gamesplayed}}
+        {{#each statuses}}
             <option value="{{this.status}}">{{this.status}}</option>
         {{/each}}
     </select><br>

@@ -24,6 +24,9 @@ DELETE FROM Players WHERE player_id = @player_id;
 SELECT * FROM Friends;
 -- Delete a friend
 DELETE FROM Friends WHERE friend_id = @friend_id;
+--  Add a friend
+INSERT INTO(initiated_by, friend_added, date_added)
+VALUES (@initiated_by, @friend_added, @date_added);
 
 
 -- GAMES TABLE -------------------------------
@@ -73,11 +76,11 @@ DELETE FROM GamesPlayed WHERE gameplayed_id = @gameplayed_id;
 -- PLAYERSFRIENDS TABLE -------------------------------
 -- Update status
 UPDATE PlayersFriends
-SET status = @new_status WHERE player_id = @player_id;
+SET status = @new_status WHERE friendslist_id = @friendslist_id;
 -- View all PlayersFriends
 SELECT * FROM PlayersFriends;
 -- Delete a friend from a player
-DELETE FROM PlayersFriends WHERE player_id = @player_id AND friend_id = @friend_id;
+DELETE FROM PlayersFriends WHERE friendslist_id = @friendslist_id;
 
 -- Friendly view for form drop downs
 SELECT player_id, username FROM Players;

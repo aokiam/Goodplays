@@ -29,10 +29,13 @@ app.get('/',(req, res) => {
     res.render('home');
 });
 
+// SELECTS -----------------------------------------------------------------------------------------------------------
 // Players page
 app.get('/players', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT player_id, username, email, password FROM Players;");
+        const [rows] = await db.query(`SELECT player_id, username, email, password
+                                        FROM Players
+                                        ORDER BY player_id ASC;`);
         res.render('players', { players: rows }); // Pass data to players.handlebars
     } catch (error) {
         console.error("Error fetching players:", error);
@@ -43,7 +46,9 @@ app.get('/players', async (req, res) => {
 // Games page
 app.get('/games', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT game_id, title, genre, game_platform, DATE_FORMAT(release_date, '%Y-%m-%d') AS format_release_date FROM Games;");
+        const [rows] = await db.query(`SELECT DISTINCT game_id, title, genre, game_platform, DATE_FORMAT(release_date, '%Y-%m-%d') AS format_release_date
+                                        FROM Games
+                                        ORDER BY game_id ASC;`);
         res.render('games', { games: rows }); // Pass data to games.handlebars
     } catch (error) {
         console.error("Error fetching games:", error);
@@ -55,8 +60,14 @@ app.get('/games', async (req, res) => {
 // GamesPlayed page
 app.get('/gamesplayed', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT gameplayed_id, player_id, game_id, status, rating, DATE_FORMAT(date_started, '%Y-%m-%d') AS format_date_started, DATE_FORMAT(date_completed, '%Y-%m-%d') AS format_date_completed, hours_played FROM GamesPlayed;");
-        res.render('gamesplayed', { gamesplayed: rows }); // Pass data to gamesplayed.handlebars
+        const [rows] = await db.query(`SELECT gameplayed_id, player_id, game_id, status, rating, DATE_FORMAT(date_started, '%Y-%m-%d') AS format_date_started,
+                                        DATE_FORMAT(date_completed, '%Y-%m-%d') AS format_date_completed, hours_played
+                                        FROM GamesPlayed
+                                        ORDER BY gameplayed_id ASC;`);
+        const [players] = await db.query(`SELECT player_id, username FROM Players ORDER BY player_id;`);
+        const [games] = await db.query(`SELECT game_id, title FROM Games ORDER BY game_id;`);
+        const [statuses] = await db.query(`SELECT DISTINCT status FROM GamesPlayed;`);
+        res.render('gamesplayed', { gamesplayed: rows, players, games, statuses}); // Pass data to gamesplayed.handlebars
     } catch (error) {
         console.error("Error fetching gamesplayed:", error);
         res.status(500).send("Database error.");
@@ -66,8 +77,16 @@ app.get('/gamesplayed', async (req, res) => {
 // Friends page
 app.get('/friends', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT friend_id, initiated_by, DATE_FORMAT(date_added, '%Y-%m-%d') AS format_date_added FROM Friends;");
-        res.render('friends', { friends: rows }); // Pass data to friends.handlebars
+        const [rows] = await db.query(`SELECT f.friendslist_id,
+                                            p1.username AS initiated_by, 
+                                            p2.username AS friend_added,
+                                            DATE_FORMAT(date_added, '%Y-%m-%d') AS format_date_added
+                                        FROM Friends f
+                                        JOIN Players p1 ON f.initiated_by = p1.player_id
+                                        JOIN Players p2 ON f.friend_added = p2.player_id
+                                        ORDER BY f.friendslist_id ASC;`);
+        const [players] = await db.query(`SELECT player_id, username FROM Players ORDER BY player_id ASC;`);
+        res.render('friends', { friends: rows, players }); // Pass data to friends.handlebars
     } catch (error) {
         console.error("Error fetching friends:", error);
         res.status(500).send("Database error.");
@@ -77,19 +96,26 @@ app.get('/friends', async (req, res) => {
 // PlayersFriends page
 app.get('/playersfriends', async (req, res) => {
     try {
-        const [rows] = await db.query(`SELECT pf.player_id, pf.friend_id, pf.status,
+        const [rows] = await db.query(`SELECT 
+                                            pf.friendslist_id,
+                                            pf.player_id, 
+                                            pf.friend_id,
                                             p1.username AS player_username,
-                                            p2.username AS friend_username
-                                        FROM PlayersFriends AS pf
+                                            p2.username AS friend_username, 
+                                            pf.status
+                                        FROM PlayersFriends pf
                                         JOIN Players p1 ON pf.player_id = p1.player_id
-                                        JOIN Players p2 ON pf.friend_id = p2.player_id;`);
-        res.render('playersfriends', { playersfriends: rows }); // Pass data to playersfriends.handlebars
+                                        JOIN Players p2 ON pf.friend_id = p2.player_id
+                                        ORDER BY pf.friendslist_id ASC;`);
+        const statuses = ['pending', 'accepted', 'declined', 'blocked'];
+        res.render('playersfriends', { playersfriends: rows, statuses}); // Pass data to playersfriends.handlebars
     } catch (error) {
         console.error("Error fetching playersfriends:", error);
         res.status(500).send("Database error.");
     }
 });
 
+// RESET ----------------------------------------------------------------------------------------------------------
 // reset procedure
 app.get('/reset', async (req, res) => {
     try{
@@ -101,6 +127,7 @@ app.get('/reset', async (req, res) => {
     }
 });
 
+// DELETES -------------------------------------------------------------------------------------------------------
 // Delete player
 app.post('/deleteplayer', async (req, res) => {
     const playerID = req.body.player_id;
@@ -116,24 +143,24 @@ app.post('/deleteplayer', async (req, res) => {
 
 // Delete friend
 app.post('/deletefriend', async (req, res) => {
-    const friendID = req.body.friend_id;
+    const friendslistID = req.body.friendslist_id;
     try {
-        await db.query(`CALL DeleteFriend(?);`, [friendID]);
+        await db.query(`CALL DeleteFriend(?);`, [friendslistID]);
         res.redirect('/friends');
-        console.log('Deleting friend_id:', friendID);
+        console.log('Deleting friendslist_id:', friendslistID);
     } catch (error) {
         console.error('Error running delete:', error);
         res.status(500).send('Delete failed.');
     }
 });
 
-// Delete player
+// Delete playersfriends
 app.post('/deleteplayersfriends', async (req, res) => {
-    const playerID = req.body.player_id;
+    const friendslistID = req.body.friendslist_id;
     try {
-        await db.query(`CALL DeletePlayersFriends(?);`, [playerID]);
+        await db.query(`CALL DeletePlayersFriends(?);`, [friendslistID]);
         res.redirect('/playersfriends');
-        console.log('Deleting player_id:', playerID);
+        console.log('Deleting friendslist_id:', friendslistID);
     } catch (error) {
         console.error('Error running delete:', error);
         res.status(500).send('Delete failed.');
@@ -167,7 +194,22 @@ app.post('/deletegamesplayed', async (req, res) => {
     }
 });
 
+// ADDS -----------------------------------------------------------------------------------------------------
+app.post('/addplayer', async (req,res) => {
+    const { username, email, password } = req.body;
+    try{
+        await db.query(
+            `INSERT INTO Players (username, email, password) VALUES (?, ?, ?);`,
+                [username, email, password]
+        );
+        res.redirect('/players');
+    } catch (error) {
+        console.error('Error adding player:', error);
+        res.status(500).send('Failed to add player.');
+    }
+});
 
+// EDITS -------------------------------------------------------------------------------------------------------
 
 // LISTENER
 
