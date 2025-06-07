@@ -28,8 +28,9 @@
     </tbody>
 </table>
 
+
 <h3>Add a Friend</h3>
-<form method="POST" action="/addfriend">
+<form id="addFriendForm" method="POST" action="/addfriend">
     <label for="initiated_by">Initiated By:</label>
     <select id="initiated_by" name="initiated_by" required>
         {{#each players}}
@@ -46,4 +47,32 @@
     <input type="date" id="date_added" name="date_added"><br>
     <button type="submit">Add Friend</button>
 </form>
+
+<script>
+document.getElementById('addFriendForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {
+        initiated_by: form.initiated_by.value,
+        friend_added: form.friend_added.value,
+        date_added: form.date_added.value || null
+    };
+    try {
+        const response = await fetch('/addfriend', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+            const message = await response.text();
+            alert('Error: ' + message); // popup on error
+        } else {
+            alert('Friend added successfully!');  // popup on friend add
+            form.reset();
+        }
+    } catch (error) {
+        alert('Unexpected error:', error.message);
+    }
+});
+</script>
 

@@ -226,19 +226,31 @@ app.post('/addgame', async (req, res) => {
 });
 
 // Add friend
+
 app.post('/addfriend', async (req, res) => {
     const { initiated_by, friend_added, date_added } = req.body;
     try{
+        const [existingFriendship] = await db.query(
+            `SELECT * FROM Friends WHERE
+                (initiated_by = ? AND friend_added = ?) OR
+                (initiated_by = ? AND friend_added = ?);`,
+            [initiated_by, friend_added, friend_added, initiated_by]
+        );
+        if (existingFriendship.length > 0){
+            return res.status(400).send('Friendship already exists.')
+        }
+
         await db.query(
             `CALL AddFriend(?, ?, ?);`,
                 [initiated_by, friend_added, date_added]
         );
-        res.redirect('/friends');
+        res.status(200).send('Friend added!')
+        //res.redirect('/friends');
     } catch (error) {
-        console.error('Error adding friend:', error);
         res.status(500).send('Failed to add friend.');
-    }
+        }
 });
+
 
 // Add gameplayed
 app.post('/addgameplayed', async (req, res) => {
@@ -251,7 +263,11 @@ app.post('/addgameplayed', async (req, res) => {
         res.redirect('/gamesplayed');
     } catch (error) {
         console.error('Error adding game played:', error);
+        if (error.code === 'ER_DUP_ENTRY'){
+            res.status(400).send('Duplicate entry.');
+        } else{
         res.status(500).send('Failed to add game played.');
+        }
     }
 });
 
