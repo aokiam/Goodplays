@@ -29,15 +29,15 @@
 </table>
 
 <h3>Add a Friend</h3>
-<form method="POST" action="/add-friend">
+<form method="POST" action="/addfriend">
     <label for="initiated_by">Initiated By:</label>
-    <select id="initiated_by" name="initiated_by">
+    <select id="initiated_by" name="initiated_by" required>
         {{#each players}}
             <option value="{{this.player_id}}">{{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="friend_added">Friend Added:</label>
-    <select id="friend_added" name="friend_added">
+    <select id="friend_added" name="friend_added" required>
         {{#each players}}
             <option value="{{this.player_id}}">{{this.username}}</option>
         {{/each}}

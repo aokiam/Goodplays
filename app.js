@@ -66,7 +66,7 @@ app.get('/gamesplayed', async (req, res) => {
                                         ORDER BY gameplayed_id ASC;`);
         const [players] = await db.query(`SELECT player_id, username FROM Players ORDER BY player_id;`);
         const [games] = await db.query(`SELECT game_id, title FROM Games ORDER BY game_id;`);
-        const [statuses] = await db.query(`SELECT DISTINCT status FROM GamesPlayed;`);
+        const statuses = ['want to play', 'currently playing', 'finished playing'];
         res.render('gamesplayed', { gamesplayed: rows, players, games, statuses}); // Pass data to gamesplayed.handlebars
     } catch (error) {
         console.error("Error fetching gamesplayed:", error);
@@ -195,11 +195,12 @@ app.post('/deletegamesplayed', async (req, res) => {
 });
 
 // ADDS -----------------------------------------------------------------------------------------------------
+// Add player
 app.post('/addplayer', async (req,res) => {
     const { username, email, password } = req.body;
     try{
         await db.query(
-            `INSERT INTO Players (username, email, password) VALUES (?, ?, ?);`,
+            `CALL AddPlayer(?, ?, ?);`,
                 [username, email, password]
         );
         res.redirect('/players');
@@ -208,6 +209,52 @@ app.post('/addplayer', async (req,res) => {
         res.status(500).send('Failed to add player.');
     }
 });
+
+// Add game
+app.post('/addgame', async (req, res) => {
+    const { title, genre, game_platform, release_date } = req.body;
+    try{
+        await db.query(
+            `CALL AddGame(?, ?, ?, ?);`,
+                [title, genre, game_platform, release_date]
+        );
+        res.redirect('/games');
+    } catch (error) {
+        console.error('Error adding game:', error);
+        res.status(500).send('Failed to add game.');
+    }
+});
+
+// Add friend
+app.post('/addfriend', async (req, res) => {
+    const { initiated_by, friend_added, date_added } = req.body;
+    try{
+        await db.query(
+            `CALL AddFriend(?, ?, ?);`,
+                [initiated_by, friend_added, date_added]
+        );
+        res.redirect('/friends');
+    } catch (error) {
+        console.error('Error adding friend:', error);
+        res.status(500).send('Failed to add friend.');
+    }
+});
+
+// Add gameplayed
+app.post('/addgameplayed', async (req, res) => {
+    const { player_id, game_id, status, rating, date_started, date_completed, hours_played } = req.body;
+    try{
+        await db.query(
+            `CALL AddGamePlayed(?, ?, ?, ?, ?, ?, ?);`,
+                [player_id, game_id, status, rating, date_started, date_completed, hours_played]
+        );
+        res.redirect('/gamesplayed');
+    } catch (error) {
+        console.error('Error adding game played:', error);
+        res.status(500).send('Failed to add game played.');
+    }
+});
+
 
 // EDITS -------------------------------------------------------------------------------------------------------
 

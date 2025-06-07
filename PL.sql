@@ -110,33 +110,90 @@ END //
 -- delete all gamesplayed with the given gpid ---------------------------
 CREATE PROCEDURE DeleteGamesPlayed(IN gpid INT)
 BEGIN
-    DECLARE pid INT;
-    DECLARE gid INT;
-    DECLARE uname VARCHAR(25);
-
-    -- get player_id and game_id associated with gpid
-    SELECT player_id, game_id INTO pid, gid
-    FROM `GamesPlayed`
-    WHERE gameplayed_id = gpid;
-
-    -- get username associated with pid from the give gpid
-    SELECT username INTO uname
-    FROM `Players`
-    WHERE player_id = pid;
-
     DELETE FROM GamesPlayed WHERE gameplayed_id = gpid;
-    DELETE FROM Players WHERE player_id = pid;
-    DELETE FROM PlayersFriends WHERE player_id = pid;
-    DELETE FROM Friends WHERE initiated_by = uname;
-    DELETE FROM Games WHERE game_id = gid;
-
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
 
 -- ADD CRUD PROCEDURES ---------------------------------------------------------------------------------------
+-- add new player -------------------------------------
+CREATE PROCEDURE AddPlayer(
+    IN in_username VARCHAR(25),
+    IN in_email VARCHAR(75),
+    IN in_password VARCHAR(50)
+)
+BEGIN  
+    INSERT INTO Players (username, email, password) 
+    VALUES (in_username, in_email, in_password);
 
+SET FOREIGN_KEY_CHECKS = 1;
+END // 
 
+-- add new game ---------------------------------------
+CREATE PROCEDURE AddGame(
+    IN in_title VARCHAR(200),
+    IN in_genre VARCHAR(50),
+    IN in_game_platform VARCHAR(255),
+    IN in_release_date DATE
+)
+BEGIN   
+    INSERT INTO Games (title, genre, game_platform, release_date)
+    VALUES (in_title, in_genre, in_game_platform, in_release_date);
+SET FOREIGN_KEY_CHECKS = 1;
+END //
+
+-- add new friend ---------------------------------------
+CREATE PROCEDURE AddFriend(
+    IN in_initiated_by INT,
+    IN in_friend_added INT,
+    IN in_date_added DATE
+)
+BEGIN
+    DECLARE next_friendslist_id INT;
+    -- insert into friends table -------------------
+    IF in_date_added = '0000-00-00' THEN
+        INSERT INTO Friends (initiated_by, friend_added, date_added)
+        VALUES (in_initiated_by, in_friend_added, NULL);   
+    ELSE
+        INSERT INTO Friends (initiated_by, friend_added, date_added)
+        VALUES (in_initiated_by, in_friend_added, in_date_added);
+    END IF;
+
+    SET next_friendslist_id = LAST_INSERT_ID();
+    -- insert into playersfriends table ---------------------
+    IF in_date_added = '0000-00-00' THEN
+        INSERT INTO PlayersFriends (friendslist_id, player_id, friend_id, status)
+        VALUES (next_friendslist_id, in_initiated_by, in_friend_added, 'pending');
+    ELSE
+        INSERT INTO PlayersFriends (friendslist_id, player_id, friend_id, status)
+        VALUES (next_friendslist_id, in_initiated_by, in_friend_added, 'accepted');
+    END IF;
+SET FOREIGN_KEY_CHECKS = 1;
+END //
+
+-- add a new game played ------------------------------
+CREATE PROCEDURE AddGamePlayed(
+    IN in_pid INT,
+    IN in_gid INT,
+    IN in_status VARCHAR(50),
+    IN in_rating DECIMAL(3,1),
+    IN in_date_started DATE,
+    IN in_date_completed DATE,
+    IN in_hours_played INT
+)
+BEGIN
+    IF in_status = 'want to play' THEN
+        INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)
+        VALUES (in_pid, in_gid, in_status, NULL, NULL, NULL, 0);
+    ELSEIF in_status = 'currently playing' THEN
+        INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)
+        VALUES (in_pid, in_gid, in_status, in_rating, in_date_started, NULL, in_hours_played);
+    ELSEIF in_status = 'finished playing' THEN
+        INSERT INTO GamesPlayed (player_id, game_id, status, rating, date_started, date_completed, hours_played)
+        VALUES (in_pid, in_gid, in_status, in_rating, in_date_started, in_date_completed, in_hours_played);
+    END IF;
+SET FOREIGN_KEY_CHECKS = 1;
+END //
 
 -- EDIT CRUD PROCEDURES --------------------------------------------------------------------------------------
 DELIMITER ;
