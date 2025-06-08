@@ -29,7 +29,7 @@
 
 
 <h3>Add a New Player</h3>
-<form method="POST" action="/addplayer">
+<form id='addPlayerForm' method="POST" action="/addplayer">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required><br>
 
@@ -43,9 +43,9 @@
 </form>
 
 <h3>Edit a player</h3>
-<form method="POST" action="/edit-player">
+<form method="POST" action="/editplayer">
     <label for="player_id">Player ID:</label>
-    <select id="player_id" name="player_id">
+    <select id="player_id" name="player_id" required>
         {{#each players}}
             <option value="{{this.player_id}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
@@ -54,7 +54,36 @@
     <input type="text" id="username" name="username"><br>
     <label for="email">Email:</label>
     <input type="text" id="email" name="email"><br>
-    <label for="password">Password:</label>
-    <input type="text" id="password" name="password"><br>
+    <label for="password">Password <i>(required)</i>:</label>
+    <input type="text" id="password" name="password" required><br>
     <button type="submit">Edit Player</button>
 </form>
+
+<script>
+document.getElementById('addPlayerForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+    };
+    try {
+        const response = await fetch('/addplayer', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+            const message = await response.text();
+            alert('Error: ' + message); // popup on error
+        } else {
+            alert('Player added successfully!');  // popup on friend add
+            form.reset();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Unexpected error:', error.message);
+    }
+});
+</script>

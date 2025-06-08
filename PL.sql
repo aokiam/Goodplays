@@ -15,7 +15,9 @@ BEGIN
 INSERT INTO Players (username, email, password)
 VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
        ('racergirl12', 'racingislife@email.com', 'r@c3c@r!'),
-       ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
+       ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris'),
+       ('greatsword_luvr', 'monsterhun123@email.com', 'M0n$terHunt3R'),
+       ('musicdiv3r', 'mitchiemfan@email.com', 'm1kuinF0RTN1T3');
 
 -- Insert example data into the Friends table--------------
 INSERT INTO Friends (initiated_by, friend_added, date_added)
@@ -151,7 +153,7 @@ CREATE PROCEDURE AddFriend(
 BEGIN
     DECLARE next_friendslist_id INT;
     -- insert into friends table -------------------
-    IF in_date_added = '0000-00-00' THEN
+    IF in_date_added IS NULL THEN
         INSERT INTO Friends (initiated_by, friend_added, date_added)
         VALUES (in_initiated_by, in_friend_added, NULL);   
     ELSE
@@ -161,7 +163,7 @@ BEGIN
 
     SET next_friendslist_id = LAST_INSERT_ID();
     -- insert into playersfriends table ---------------------
-    IF in_date_added = '0000-00-00' THEN
+    IF in_date_added IS NULL THEN
         INSERT INTO PlayersFriends (friendslist_id, player_id, friend_id, status)
         VALUES (next_friendslist_id, in_initiated_by, in_friend_added, 'pending');
     ELSE
@@ -196,4 +198,55 @@ SET FOREIGN_KEY_CHECKS = 1;
 END //
 
 -- EDIT CRUD PROCEDURES --------------------------------------------------------------------------------------
+-- edit a player -----------------------
+CREATE PROCEDURE EditPlayer(
+    IN in_pid INT,
+    IN in_username VARCHAR(25),
+    IN in_email VARCHAR(75),
+    IN in_password VARCHAR(50)
+)
+BEGIN
+
+SET FOREIGN_KEY_CHECKS = 1;
+END //
+
+-- edit a players friend -------------------
+CREATE PROCEDURE EditPlayersFriend(
+    IN friendslist_id INT,
+    IN friend_id INT,
+    IN player_id INT,
+    IN status VARCHAR(50)
+)
+BEGIN
+
+SET FOREIGN_KEY_CHECKS = 1;
+END //
+
+-- edit a game ------------------------
+CREATE PROCEDURE EditGame(
+    IN in_title VARCHAR(200),
+    IN in_genre VARCHAR(50),
+    IN in_game_platform VARCHAR(255),
+    IN in_release_date DATE
+)
+BEGIN
+
+SET FOREIGN_KEY_CHECKS = 1;
+END //
+
+-- edit a game played ------------------
+CREATE PROCEDURE EditGamePlayed(
+    IN in_pid INT,
+    IN in_gid INT,
+    IN in_status VARCHAR(50),
+    IN in_rating DECIMAL(3,1),
+    IN in_date_started DATE,
+    IN in_date_completed DATE,
+    IN in_hours_played INT
+)
+BEGIN
+
+SET FOREIGN_KEY_CHECKS = 1;
+END //
+
 DELIMITER ;

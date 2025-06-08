@@ -69,6 +69,7 @@ document.getElementById('addFriendForm').addEventListener('submit', async functi
         } else {
             alert('Friend added successfully!');  // popup on friend add
             form.reset();
+            location.reload();
         }
     } catch (error) {
         alert('Unexpected error:', error.message);

@@ -38,7 +38,7 @@
 </table>
 
 <h3>Add a New Game Played</h3>
-<form method="POST" action="/addgameplayed">
+<form id='addGamePlayedForm' method="POST" action="/addgameplayed">
     <label for="player_id">Player ID:</label>
     <select id="player_id" name="player_id" required>
         {{#each players}}
@@ -72,19 +72,19 @@
 <h3>Edit a Game Played</h3>
 <form method="POST" action="/editgameplayed">
     <label for="player_id">Player ID:</label>
-    <select id="player_id" name="player_id">
+    <select id="player_id" name="player_id" required>
         {{#each players}}
             <option value="{{this.player_id}}">{{this.player_id}}: {{this.username}}</option>
         {{/each}}
     </select><br>
     <label for="game_id">Game ID:</label>
-    <select id="game_id" name="game_id">
+    <select id="game_id" name="game_id" required>
         {{#each games}}
             <option value="{{this.game_id}}">{{this.game_id}}: {{this.title}}</option>
         {{/each}}
     </select><br>
     <label for="status">Status:</label>
-    <select id="status" name="status">
+    <select id="status" name="status" required>
         {{#each statuses}}
             <option value="{{this.status}}">{{this.status}}</option>
         {{/each}}
@@ -99,3 +99,37 @@
     <input type="number" id="hours_played" name="hours_played" min="0"><br>
     <button type="submit">Edit Game Played</button>
 </form>
+
+
+<script>
+document.getElementById('addGamePlayedForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {
+        player_id: form.player_id.value,
+        game_id: form.game_id.value,
+        status: form.status.value,
+        rating: Number(document.getElementById('rating').value) || null,
+        date_started: form.date_started.value || null,
+        date_completed: form.date_completed.value || null,
+        hours_played: Number(document.getElementById('hours_played').value) || 0 || null
+    };
+    try {
+        const response = await fetch('/addgameplayed', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+            const message = await response.text();
+            alert('Error: ' + message); // popup on error
+        } else {
+            alert('Game added successfully!');  // popup on friend add
+            form.reset();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Unexpected error:', error.message);
+    }
+});
+</script>

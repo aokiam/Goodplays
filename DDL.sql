@@ -71,7 +71,9 @@ CREATE TABLE GamesPlayed(
 INSERT INTO Players (username, email, password)
 VALUES ('gamer_kid', 'gamer_kid@email.com', 'g@m3rP@55'),
        ('racergirl12', 'racingislife@email.com', 'r@c3c@r!'),
-       ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris');
+       ('tetrislover99', 'retrogames1@email.com', 'tetetet3t0ris'),
+       ('greatsword_luvr', 'monsterhun123@email.com', 'M0n$terHunt3R'),
+       ('musicdiv3r', 'mitchiemfan@email.com', 'm1kuinF0RTN1T3');
 
 -- Insert example data into the Friends table--------------
 INSERT INTO Friends (initiated_by, friend_added, date_added)

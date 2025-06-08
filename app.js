@@ -198,12 +198,29 @@ app.post('/deletegamesplayed', async (req, res) => {
 // Add player
 app.post('/addplayer', async (req,res) => {
     const { username, email, password } = req.body;
+    if (!username || !email || !password){
+        res.status(400).send('Missing Username, Email, or Password.');
+    }
     try{
+        const [existing] = await db.query(
+            `SELECT * FROM Players WHERE (username = ?) OR (email = ?);`,
+                [username, email]
+        );
+
+        if (existing.length > 0) {
+            if (existing.some(player => player.username === username)){
+                return res.status(400).send('Username already in use.');
+            }
+            if (existing.some(player => player.email === email)){
+                return res.status(400).send('Email already in use.');
+            }
+        }
+
         await db.query(
             `CALL AddPlayer(?, ?, ?);`,
                 [username, email, password]
         );
-        res.redirect('/players');
+        res.status(200).send('Player added successfully!');
     } catch (error) {
         console.error('Error adding player:', error);
         res.status(500).send('Failed to add player.');
@@ -213,12 +230,21 @@ app.post('/addplayer', async (req,res) => {
 // Add game
 app.post('/addgame', async (req, res) => {
     const { title, genre, game_platform, release_date } = req.body;
+    if (!title || !genre || !game_platform || !release_date){
+        res.status(400).send('Missing Title, Genre, Game Platform, or Release Date.');
+    }
     try{
+        const [existing] = await db.query(
+            `SELECT * FROM Games WHERE title = ?`, [title]
+        );
+        if (existing.some(game => game.title === title)){
+            return res.status(400).send('Game already exists.');
+        }
         await db.query(
             `CALL AddGame(?, ?, ?, ?);`,
                 [title, genre, game_platform, release_date]
         );
-        res.redirect('/games');
+        res.status(200).send('Game added successfully!');
     } catch (error) {
         console.error('Error adding game:', error);
         res.status(500).send('Failed to add game.');
@@ -229,6 +255,10 @@ app.post('/addgame', async (req, res) => {
 
 app.post('/addfriend', async (req, res) => {
     const { initiated_by, friend_added, date_added } = req.body;
+    if (!initiated_by || !friend_added){
+        return res.status(400).send('Missing Initiated By or Friend Added.');
+    }
+
     try{
         const [existingFriendship] = await db.query(
             `SELECT * FROM Friends WHERE
@@ -237,14 +267,18 @@ app.post('/addfriend', async (req, res) => {
             [initiated_by, friend_added, friend_added, initiated_by]
         );
         if (existingFriendship.length > 0){
-            return res.status(400).send('Friendship already exists.')
+            return res.status(400).send('Friendship already exists.');
+        }
+
+        if (initiated_by === friend_added){
+            return res.status(400).send('Cannot add self as friend.');
         }
 
         await db.query(
             `CALL AddFriend(?, ?, ?);`,
                 [initiated_by, friend_added, date_added]
         );
-        res.status(200).send('Friend added!')
+        res.status(200).send('Friend added successfully!');
         //res.redirect('/friends');
     } catch (error) {
         res.status(500).send('Failed to add friend.');
@@ -255,24 +289,51 @@ app.post('/addfriend', async (req, res) => {
 // Add gameplayed
 app.post('/addgameplayed', async (req, res) => {
     const { player_id, game_id, status, rating, date_started, date_completed, hours_played } = req.body;
+    if (!player_id || !game_id || !status){
+        return res.status(400).send('Missing Player ID, Game ID, or Status.');
+    }
+
+    if (new Date(date_started) > new Date(date_completed)){
+        return res.status(400).send('Start date must be earlier than completed date.');
+    }
+
+    if (status === 'finished playing'){
+        if (!date_completed || !date_started || !rating || !hours_played){
+            return res.status(400).send('Games FINISHED PLAYING must have date started, date completed, rating, and hours played.');
+        }
+    } else if (status === 'currently playing'){
+        if (!date_started || !rating || !hours_played){
+            return res.status(400).send('Games CURRENTLY PLAYING must have date started, rating, and hours played.');
+        }
+    }
+
+
     try{
+        const [existingGamePlayed] = await db.query(
+            `SELECT * FROM GamesPlayed WHERE player_id = ? AND game_id = ?`,
+                [player_id, game_id]
+        );
+        if (existingGamePlayed.length > 0){
+            return res.status(400).send('Player already playing that game.');
+        }
+
         await db.query(
             `CALL AddGamePlayed(?, ?, ?, ?, ?, ?, ?);`,
                 [player_id, game_id, status, rating, date_started, date_completed, hours_played]
         );
-        res.redirect('/gamesplayed');
+        res.status(200).send("Game played added successfully!");
     } catch (error) {
-        console.error('Error adding game played:', error);
-        if (error.code === 'ER_DUP_ENTRY'){
-            res.status(400).send('Duplicate entry.');
-        } else{
+        console.error('error adding game played:', error)
         res.status(500).send('Failed to add game played.');
         }
-    }
+    
 });
 
 
 // EDITS -------------------------------------------------------------------------------------------------------
+add.post('/editplayer', async (req, res) => {
+    
+})
 
 // LISTENER
 

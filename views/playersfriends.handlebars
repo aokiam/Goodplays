@@ -34,14 +34,14 @@
 <h3>Edit a playersfriends</h3>
 <form method="POST" action="/editplayersfriends">
     <label for="friendslist_id">FriendsList ID:</label>
-    <select id="friendlist_id" name="friendslist_id">
+    <select id="friendlist_id" name="friendslist_id" required>
         {{#each playersfriends}}
             <option value="{{this.friendslist_id}}">{{this.friendslist_id}}: {{this.player_username}} + {{this.friend_username}}</option>
         {{/each}}
     </select><br>
 
     <label for="status">Status:</label>
-    <select id="status" name="status">
+    <select id="status" name="status" required>
         {{#each statuses}}
             <option value="{{this}}">{{this}}</option>
         {{/each}}
