@@ -12,9 +12,6 @@ SET username = @new_username WHERE player_id = @player_id;
 -- Update Player's email
 UPDATE Players
 SET email = @new_email WHERE player_id = @player_id;
--- Update Player's password
-UPDATE Players
-SET password = @new_password WHERE player_id = @player_id;
 -- Delete a Player
 DELETE FROM Players WHERE player_id = @player_id;
 
@@ -52,6 +49,9 @@ DELETE FROM Games WHERE game_id = @game_id;
 
 
 -- GAMESPLAYED TABLE -------------------------------
+-- Insert into GamesPlayed table
+INSERT INTO GamesPlayed(player_id, game_id, status, rating, date_started, date_completed, hours_played)
+VALUES (@player_id, @game_id, @status, @rating, @date_started, @date_completed, @hours_played);
 -- View all games played
 SELECT * FROM GamesPlayed;
 -- Update GamesPlayed's status

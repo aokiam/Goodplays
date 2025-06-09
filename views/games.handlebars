@@ -45,7 +45,7 @@
 </form>
 
 <h3>Edit a game</h3>
-<form method="POST" action="/editgame">
+<form id="editGameForm" method="POST" action="/editgame">
     <label for="game_id">Game ID:</label>
     <select id="game_id" name="game_id" required>
         {{#each games}}
@@ -84,6 +84,37 @@ document.getElementById('addGameForm').addEventListener('submit', async function
             alert('Error: ' + message); // popup on error
         } else {
             alert('Game played added successfully!');  // popup on friend add
+            form.reset();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Unexpected error:', error.message);
+    }
+});
+</script>
+
+<script>
+document.getElementById('editGameForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {
+        game_id: form.game_id.value,
+        title: form.title.value,
+        genre: form.genre.value,
+        game_platform: form.game_platform.value,
+        release_date: form.release_date.value
+    };
+    try {
+        const response = await fetch('/editgame', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+            const message = await response.text();
+            alert('Error: ' + message); // popup on error
+        } else {
+            alert('Game edited successfully!');  // popup on friend add
             form.reset();
             location.reload();
         }

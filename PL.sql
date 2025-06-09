@@ -202,42 +202,72 @@ END //
 CREATE PROCEDURE EditPlayer(
     IN in_pid INT,
     IN in_username VARCHAR(25),
-    IN in_email VARCHAR(75),
-    IN in_password VARCHAR(50)
+    IN in_email VARCHAR(75)
 )
 BEGIN
-
+    UPDATE Players
+    SET
+        username = IFNULL(NULLIF(in_username, ''), username),
+        email = IFNULL(NULLIF(in_email, ''), email)
+    WHERE player_id = in_pid;
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
 -- edit a players friend -------------------
 CREATE PROCEDURE EditPlayersFriend(
-    IN friendslist_id INT,
-    IN friend_id INT,
-    IN player_id INT,
-    IN status VARCHAR(50)
+    IN in_friendslist_id INT,
+    IN in_status VARCHAR(50)
 )
 BEGIN
+    DECLARE current_status VARCHAR(50);
+    -- get the current status
+    SELECT status INTO current_status FROM PlayersFriends
+    WHERE friendslist_id = in_friendslist_id;
+
+    -- update the status
+    UPDATE PlayersFriends
+    SET status = in_status
+    WHERE friendslist_id = in_friendslist_id;
+
+    -- if changing from pending to accepted, update date_added on the friends table to the current date
+    IF current_status = 'pending' AND in_status = 'accepted' THEN
+        UPDATE Friends
+        SET date_added = CURDATE()
+        WHERE friendslist_id = in_friendslist_id;
+    -- if changing from accepted to blocked, remove date from the friends table to nothing
+    ELSEIF current_status = 'accepted' AND in_status = 'blocked' THEN
+        UPDATE Friends
+        SET date_added = NULL
+        WHERE friendslist_id = in_friendslist_id;
+    END IF;
 
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
 -- edit a game ------------------------
 CREATE PROCEDURE EditGame(
+    IN in_gid INT,
     IN in_title VARCHAR(200),
     IN in_genre VARCHAR(50),
     IN in_game_platform VARCHAR(255),
     IN in_release_date DATE
 )
 BEGIN
+    UPDATE Games
+    SET
+        title = IFNULL(NULLIF(in_title, ''), title),
+        genre = IFNULL(NULLIF(in_genre, ''), genre),
+        game_platform = IFNULL(NULLIF(in_game_platform, ''), game_platform),
+        release_date = IFNULL(NULLIF(in_release_date, ''), release_date)
+    WHERE game_id = in_gid;
+
 
 SET FOREIGN_KEY_CHECKS = 1;
 END //
 
 -- edit a game played ------------------
 CREATE PROCEDURE EditGamePlayed(
-    IN in_pid INT,
-    IN in_gid INT,
+    IN in_gpid INT,
     IN in_status VARCHAR(50),
     IN in_rating DECIMAL(3,1),
     IN in_date_started DATE,
@@ -245,6 +275,25 @@ CREATE PROCEDURE EditGamePlayed(
     IN in_hours_played INT
 )
 BEGIN
+    DECLARE current_status VARCHAR(50);
+    -- get the current status
+    SELECT status INTO current_status FROM GamesPlayed
+    WHERE gameplayed_id = in_gpid;
+    UPDATE GamesPlayed
+    SET
+        status = IFNULL(NULLIF(in_status, ''), status),
+        rating = IFNULL(NULLIF(in_rating, ''), rating),
+        date_started = IFNULL(NULLIF(in_date_started, ''), date_started),
+        date_completed = IFNULL(NULLIF(in_date_completed, ''), date_completed),
+        hours_played = IFNULL(NULLIF(in_hours_played, ''), hours_played)
+    WHERE gameplayed_id = in_gpid;
+
+    -- if changing from finished playing to currently playing, remove date from the friends table to nothing
+    IF current_status = 'finished playing' AND in_status = 'currently playing' THEN
+        UPDATE GamesPlayed
+        SET date_completed = NULL
+        WHERE gameplayed_id = in_gpid;
+    END IF;
 
 SET FOREIGN_KEY_CHECKS = 1;
 END //

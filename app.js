@@ -252,7 +252,6 @@ app.post('/addgame', async (req, res) => {
 });
 
 // Add friend
-
 app.post('/addfriend', async (req, res) => {
     const { initiated_by, friend_added, date_added } = req.body;
     if (!initiated_by || !friend_added){
@@ -331,9 +330,109 @@ app.post('/addgameplayed', async (req, res) => {
 
 
 // EDITS -------------------------------------------------------------------------------------------------------
-add.post('/editplayer', async (req, res) => {
-    
-})
+// Edit player
+app.post('/editplayer', async (req, res) => {
+    const { player_id, username, email } = req.body;
+    try{
+        const [existing] = await db.query(
+            `SELECT * FROM Players WHERE (username = ?) OR (email = ?);`,
+                [username, email]
+        );
+
+        if (existing.length > 0) {
+            if (existing.some(player => player.username === username)){
+                return res.status(400).send('Username already in use.');
+            }
+            if (existing.some(player => player.email === email)){
+                return res.status(400).send('Email already in use.');
+            }
+        }
+
+        await db.query(
+            `CALL EditPlayer(?, ?, ?);`,
+                [player_id, username, email]
+        );
+        res.status(200).send('Player edited successfully!');
+    } catch (error) {
+        console.error('Error editing player:', error);
+        res.status(500).send('Failed to edit player.');
+    }
+});
+
+// Edit Players Friend
+app.post('/editplayersfriend', async (req, res) => {
+    const { friendslist_id, status } = req.body;
+    try{
+        await db.query(
+            `CALL EditPlayersFriend(?, ?);`,
+                [friendslist_id, status]
+        );
+        res.status(200).send("Player's friend edited successfully!");
+    } catch (error) {
+        console.error("Error editing player's friend:", error);
+        res.status(500).send('Failed to edit player.');
+    }
+});
+
+// Edit Game
+app.post('/editgame', async (req, res) => {
+    const { game_id, title, genre, game_platform, release_date } = req.body;
+    try{
+        const [existing] = await db.query(
+            `SELECT * FROM Games WHERE title = ?`, [title]
+        );
+        if (existing.some(game => game.title === title)){
+            return res.status(400).send('Game already exists.');
+        }
+        await db.query(
+            `CALL EditGame(?, ?, ?, ?, ?)`,
+                [game_id, title, genre, game_platform, release_date]
+        );
+        res.status(200).send("Game edited successfully!");
+    } catch (error) {
+        console.error("Error editing game:", error);
+        res.status(500).send("Failed to edit game.");
+    }
+});
+
+// Edit Game Played
+app.post('/editgameplayed', async (req, res) => {
+    const { gamesplayed_id, status, rating, date_started, date_completed, hours_played } = req.body;
+    try{
+        // get old status from db
+        const [rows] = await db.query(
+            `SELECT status FROM GamesPlayed WHERE gameplayed_id = ?`, [gamesplayed_id]
+        );
+        const oldStatus = rows[0].status;
+
+        // validate based on change
+        // realistically, no one will change from "currently playing" or "finished playing" to "want to play" so i will ignore those cases
+        if (oldStatus === 'want to play' && status === 'currently playing'){
+            if (!date_started || !rating || !hours_played || hours_played <= 0){
+                return res.status(400).send('Rating, Date Started, and Hours Played needed to change to "CURRENTLY PLAYING".');
+            }
+        } else if (oldStatus === 'currently playing' && status === 'finished playing'){
+            if (!date_completed){
+                return res.status(400).send('Date Completed needed to change to "FINISHED PLAYING".');
+            }
+        } else if (oldStatus === 'want to play' && status === 'finished playing'){
+            if (!date_started || !rating || !hours_played || hours_played <= 0 || !date_completed){
+                return res.status(400).send('Rating, Date Started, Date Completed, and Hours Played needed to change to "FINISHED PLAYING".'); 
+            }
+        } 
+
+
+        // call edit query
+        await db.query(
+            `CALL EditGamePlayed(?, ?, ?, ?, ?, ?)`,
+                [gamesplayed_id, status, rating, date_started, date_completed, hours_played]
+        );
+        res.status(200).send("Game played edited successfully!");
+    } catch (error) {
+        console.error("Error editing game played:", error);
+        res.status(500).send("Failed to edit game played.");
+    }
+});
 
 // LISTENER
 

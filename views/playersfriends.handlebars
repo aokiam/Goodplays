@@ -32,9 +32,9 @@
 
 
 <h3>Edit a playersfriends</h3>
-<form method="POST" action="/editplayersfriends">
+<form id="editPlayersFriendForm" method="POST" action="/editplayersfriend">
     <label for="friendslist_id">FriendsList ID:</label>
-    <select id="friendlist_id" name="friendslist_id" required>
+    <select id="friendslist_id" name="friendslist_id" required>
         {{#each playersfriends}}
             <option value="{{this.friendslist_id}}">{{this.friendslist_id}}: {{this.player_username}} + {{this.friend_username}}</option>
         {{/each}}
@@ -48,3 +48,32 @@
     </select><br>
     <button type="submit">Edit PlayersFriends</button>
 </form>
+
+
+<script>
+document.getElementById('editPlayersFriendForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {
+        friendslist_id: form.friendslist_id.value,
+        status: form.status.value
+    };
+    try {
+        const response = await fetch('/editplayersfriend', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+            const message = await response.text();
+            alert('Error: ' + message); // popup on error
+        } else {
+            alert("Player's friend edited successfully!");  // popup on friend add
+            form.reset();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Unexpected error:', error.message);
+    }
+});
+</script>

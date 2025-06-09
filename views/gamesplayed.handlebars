@@ -70,31 +70,25 @@
 
 
 <h3>Edit a Game Played</h3>
-<form method="POST" action="/editgameplayed">
-    <label for="player_id">Player ID:</label>
-    <select id="player_id" name="player_id" required>
-        {{#each players}}
-            <option value="{{this.player_id}}">{{this.player_id}}: {{this.username}}</option>
-        {{/each}}
-    </select><br>
-    <label for="game_id">Game ID:</label>
-    <select id="game_id" name="game_id" required>
-        {{#each games}}
-            <option value="{{this.game_id}}">{{this.game_id}}: {{this.title}}</option>
+<form id="editGamePlayedForm" method="POST" action="/editgameplayed">
+    <label for="gamesplayed_id">GamesPlayed ID:</label>
+    <select id="gamesplayed_id" name="gamesplayed_id" required>
+        {{#each gamesplayed}}
+            <option value="{{this.gameplayed_id}}">{{this.gameplayed_id}}</option>
         {{/each}}
     </select><br>
     <label for="status">Status:</label>
     <select id="status" name="status" required>
         {{#each statuses}}
-            <option value="{{this.status}}">{{this.status}}</option>
+            <option value="{{this}}">{{this}}</option>
         {{/each}}
     </select><br>
     <label for="rating">Rating (0-10):</label>
     <input type="number" id="rating" name="rating" min="0" max="10" step="0.1"><br>
     <label for="date_started">Date Started:</label>
     <input type="date" id="date_started" name="date_started"><br>
-    <label for="date_finished">Date Completed:</label>
-    <input type="date" id="date_finished" name="date_finished"><br>
+    <label for="date_completed">Date Completed:</label>
+    <input type="date" id="date_completed" name="date_completed"><br>
     <label for="hours_played">Hours Played:</label>
     <input type="number" id="hours_played" name="hours_played" min="0"><br>
     <button type="submit">Edit Game Played</button>
@@ -125,6 +119,38 @@ document.getElementById('addGamePlayedForm').addEventListener('submit', async fu
             alert('Error: ' + message); // popup on error
         } else {
             alert('Game added successfully!');  // popup on friend add
+            form.reset();
+            location.reload();
+        }
+    } catch (error) {
+        alert('Unexpected error:', error.message);
+    }
+});
+</script>
+
+<script>
+document.getElementById('editGamePlayedForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+    const form = event.target;
+    const data = {
+        gamesplayed_id: form.gamesplayed_id.value,
+        status: form.status.value,
+        rating: form.rating.value,
+        date_started: form.date_started.value,
+        date_completed: form.date_completed.value,
+        hours_played: form.hours_played.value
+    };
+    try {
+        const response = await fetch('/editgameplayed', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        if (!response.ok){
+            const message = await response.text();
+            alert('Error: ' + message); // popup on error
+        } else {
+            alert('Game played added successfully!');  // popup on friend add
             form.reset();
             location.reload();
         }
