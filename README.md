@@ -9,3 +9,6 @@ Shows understanding of database design, SQL, and normalization.
 <strong>Run the following to install all packages necessary:</strong> <br>
 npm install mysql2 express forever nodemon <br>
 npm install express-handlebars mysql2
+<br>
+<br>
+all code is self written and referenced off of modules
