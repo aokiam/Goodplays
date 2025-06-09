@@ -54,7 +54,7 @@ CREATE TABLE PlayersFriends(
 
 -- Table for GamesPlayed--------------
 CREATE TABLE GamesPlayed(
-    gameplayed_id INT PRIMARY KEY AUTO_INCREMENT,
+    gameplayed_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     player_id INT NOT NULL,
     game_id INT NOT NULL,
     status ENUM('finished playing', 'currently playing', 'want to play'),
